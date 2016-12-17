@@ -33,7 +33,7 @@
     <div class="md-card">
         <div class="md-card-content">
 <div id="page1">
-            <center><u><h6 class="heading_c uk-margin-bottom uk-text-bold" >PERSONAL RECORDS OF {{$student->NAME}}</h6></u></center>
+            <center><u><h6 class="heading_c uk-margin-bottom uk-text-bold" >PERSONAL RECORDS OF {{$student->name}}</h6></u></center>
 
 @section('content')
  
@@ -46,52 +46,42 @@
     <table   class="uk-table uk-table-nowrap " >
         
         <tr>
-          <td width="210" class="uppercase" align="right"><strong>INDEXNO N<u>O</u></strong></td>
-          <td width="408" class="capitalize">{{ $student->INDEXNO }}</td>								
+          <td width="210" class="uppercase" align="right"><strong>INDEXNO N<u>O</u>:</strong></td>
+          <td width="408" class="capitalize">{{ $student->indexNo }}</td>								
         </tr>
         <tr>
-            <td width="210" class="uppercase" align="right"><strong>YEAR</strong></td>
+            <td width="210" class="uppercase" align="right"><strong>CLASS:</strong></td>
           
-          <td width="408" class="capitalize">{{ $student->YEAR }}</td>
+          <td width="408" class="capitalize">{{ $student->currentClass }}</td>
         </tr>
         <tr>
-          <td class="uppercase" align="right"><strong>SURNAME:</strong></td>
-          <td class="capitalize"><?php echo strtoupper($student->SURNAME)  ?></td>
+          <td class="uppercase" align="right"><strong>OTHERNAMES:</strong></td>
+          <td class="capitalize"><?php echo strtoupper($student->othernames)  ?></td>
         </tr>
          <tr>
-          <td class="uppercase" align="right"><strong>FIRST NAME:</strong></td>
-          <td class="capitalize"><?php echo strtoupper($student->FIRSTNAME) ?></td>
+          <td class="uppercase" align="right"><strong>SURNAME:</strong></td>
+          <td class="capitalize"><?php echo strtoupper($student->surname) ?></td>
         </tr>
         <tr>
           <td class="uppercase" align="right"><strong>AGE</strong>:</td>
-          <td class="capitalize"><?php   echo  $student->AGE ?>yrs</td>
+          <td class="capitalize"><?php   echo  $student->age ?>yrs</td>
         </tr>
         <tr>
           <td class="uppercase" align="right"><strong>GENDER</strong>:</td>
-          <td class="capitalize"><?php   echo strtoupper($student->SEX)?></td>
+          <td class="capitalize"><?php   echo strtoupper($student->gender)?></td>
         </tr>
+        
         <tr>
-            <td class="uppercase" align="right"><strong>MARITAL STATUS</strong></td>
-            <td class="capitalize">{!! strtoupper($student->MARITAL_STATUS) !!}</td>
-
-        </tr>
-        <tr>
-          <td class="uppercase" align="right"><strong>PHONE:</strong></td>
-          <td class="capitalize"><?php echo "+233".\substr($student->TELEPHONENO,-9); ?></td>
+          <td class="uppercase" align="right"><strong>PARENT PHONE:</strong></td>
+          <td class="capitalize"><?php echo "+233".\substr($student->parentPhone,-9); ?></td>
         </tr>
        
         <tr>
           <td class="uppercase" align="right"><strong>PROGRAMME:</strong></td>
-          <td class="capitalize">{!! strtoupper($student->program->PROGRAMME) !!}</td>
+          <td class="capitalize">{!! strtoupper($student->program->name) !!}</td>
           
         </tr>
-         @if(@\Auth::user()->department=='top')
-        <tr>
-          <td class="uppercase" align="right"><strong>CLASS:</strong></td>
-          <td class="capitalize">{!! strtoupper($student->CLASS) !!}</td>
-          
-        </tr>
-       @endif
+         
        <tr>
           <td class="uppercase" align="right"><strong>FEES OWING:</strong></td>
           <td class="capitalize">GHC<?php echo  $student->BILL_OWING ?></td>
@@ -102,16 +92,20 @@
           
         </tr>
          <tr>
-          <td class="uppercase" align="right"><strong>EMAIL</strong></td>
-          <td class="capitalize">{!!strtoupper($student->EMAIL) !!}</td>
+          <td class="uppercase" align="right"><strong>HOUSE</strong></td>
+          <td class="capitalize">{!!strtoupper($student->house) !!}</td>
           
         </tr>
         <tr>
-          <td class="uppercase" align="right"><strong>STATUS</strong></td>
-          <td class="capitalize">{!! strtoupper($student->STATUS) !!}</td>
+          <td class="uppercase" align="right"><strong>SUBJECT COMBINATIONS</strong></td>
+          <td class="capitalize">{!! strtoupper($student->subjectCombination) !!}</td>
           
         </tr>
-         
+          <tr>
+          <td class="uppercase" align="right"><strong>STATUS</strong></td>
+          <td class="capitalize">{!!strtoupper($student->status) !!}</td>
+          
+        </tr>
       </table>
 	 		 
              </td>
@@ -131,12 +125,12 @@
                   <table>
                       <tr>
                         <td class="uppercase" ><strong>HOMETOWN:</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->HOMETOWN) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->hometown) !!}</td>
 
                       </tr>
                       <tr>
                         <td class="uppercase"><strong>CONTACT ADDRESS</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->ADDRESS) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->address) !!}</td>
 
                       </tr>
                       
@@ -146,12 +140,12 @@
                   <table>
                   <tr>
                         <td class="uppercase"><strong>NATIONALITY</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->COUNTRY )!!}</td>
+                        <td class="capitalize">{!! strtoupper($student->nationality )!!}</td>
 
                       </tr>
                        <tr>
                         <td class="uppercase"><strong>RELIGION</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->RELIGION) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->religion) !!}</td>
 
                       </tr>
                   </table>
@@ -159,13 +153,13 @@
               <td>
                 <table>
                     <tr>
-                        <td class="uppercase"  ><strong>RESIDENTIAL ADDRESS:</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->RESIDENTIAL_ADDRESS) !!}</td>
+                        <td class="uppercase"  ><strong>RESIDENTAL STATUS:</strong></td>
+                        <td class="capitalize">{!! strtoupper($student->studentType) !!}</td>
 
                       </tr>
                       <tr>
                         <td class="uppercase"  ><strong>HOMETOWN REGION</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->REGION) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->religion) !!}</td>
 
                       </tr>
                 </table>
@@ -177,16 +171,9 @@
               </td>
           </tr>
       </table>
-      <table>
-                 <tr>
-                        <td class="uppercase"><strong>HOSTEL NAME</strong></td>
-                        <td class="capitalize">{!!strtoupper( $student->HOSTEL) !!}</td>
-                
-                  
-                      </tr>
-                      
-                </table>
+       
         </fieldset>
+     <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
      <fieldset class=""><legend class="uk-text-bold heading_c">GUARDIAN DATA</legend>
       <table>
           <tr>
@@ -194,12 +181,12 @@
                   <table>
                       <tr>
                         <td class="uppercase" ><strong>GUARDIAN NAME:</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->GUARDIAN_NAME) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->parentName) !!}</td>
 
                       </tr>
                       <tr>
                         <td class="uppercase"><strong>GUARDIAN ADDRESS</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->GUARDIAN_ADDRESS) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->parentAddress) !!}</td>
 
                       </tr>
                        
@@ -209,12 +196,14 @@
                 <table>
                     <tr>
                         <td class="uppercase"  ><strong>GUARDIAN PHONE:</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->GUARDIAN_PHONE) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->parentPhone) !!}</td>
 
                       </tr>
                       <tr>
                         <td class="uppercase"  ><strong>GUARDIAN OCCUPATION</strong></td>
-                        <td class="capitalize">{!! strtoupper($student->GUARDIAN_OCCUPATION) !!}</td>
+                        <td class="capitalize">{!! strtoupper($student->parentOccupation) !!}</td>
+                        <td class="uppercase"  ><strong>RELATIONSHIP WITH GUARDIAN</strong></td>
+                        <td class="capitalize">{!! strtoupper($student->parentRelation) !!}</td>
 
                       </tr>
                        
@@ -225,21 +214,21 @@
           
       </table>
        </fieldset>
-</div>
+</div>  @if(!empty($trail))
             <div id="page2">
                  <center><h5>ACADEMIC ISSUES (FLAGS)</h5></center>
                     <hr>
-                  @if(!empty($trail))
+                 
                     <div class="uk-overflow-container" >
                 <center><span class="uk-text-success uk-text-bold">{!! $trail->total()!!} Records</span></center>
                 <table class="uk-table " id="ts_pager_filter"> 
                     <thead>
                         <tr>
                             <th class="filter-false remove sorter-false" >NO</th>
-                            <th data-priority="6">LEVEL</th>
-                            <th data-priority="6">SEMESTER</th>
+                            <th data-priority="6">CLASS</th>
+                            <th data-priority="6">TERM</th>
                             <th data-priority="6">COURSE</th>
-                            <th data-priority="6">CREDIT</th>
+                           
                             <th>GRADE</th>
                             <th>ACADEMIC YEAR</th>
 
@@ -253,10 +242,10 @@
 
                     <tr align="">
                         <td> {{ $trail->perPage()*($trail->currentPage()-1)+($index+1) }} </td>
-                        <td> {{ @$row->level }}</td>
-                         <td> {{ @$row->sem }}</td>
-                         <td> {{ strtoupper(@$row->courseMount->course->COURSE_NAME) }}</td>
-                           <td> {{ @$row->credits }}</td>
+                        <td> {{ @$row->class }}</td>
+                         <td> {{ @$row->term }}</td>
+                         <td> {{ strtoupper(@$row->courseMount->course->name) }}</td>
+                          
                           <td> {{ @$row->grade }}</td>
                            <td> {{ @$row->year }}</td>
 

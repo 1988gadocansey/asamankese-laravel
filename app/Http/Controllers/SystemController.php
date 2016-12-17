@@ -93,24 +93,24 @@ class SystemController extends Controller
     public function getDepartmentList() {
         if(@\Auth::user()->role=='Registrar'){
          $department = \DB::table('departments')->where('deptcode',@\Auth::user()->department)->orderBy("deptcode")
-                ->lists('deptcode', 'deptcode');
+                ->lists('name', 'deptcode');
          return $department;
         }
         elseif(@\Auth::user()->role=='HOD' ||@\Auth::user()->role=='Lecturer' ){
             $department = \DB::table('departments')->where('deptcode',@\Auth::user()->department)->orderBy("deptcode")
-                ->lists('deptcode', 'deptcode');
+                 ->lists('name', 'deptcode');
          return $department;
         }
         else{
             $department = \DB::table('departments')->orderBy("deptcode")
-                ->lists('deptcode', 'deptcode');
+                ->lists('name', 'deptcode');
          return $department;
         }
     }
     public function getGradeSystemIDList() {
          
          
-         $grade = \DB::table('tpoly_grade_system')
+         $grade = \DB::table('gradingsystem')
                 ->lists('type', 'type');
          return $grade;
        
@@ -122,6 +122,15 @@ class SystemController extends Controller
          $school = \DB::table('house')->orderBy("house")
                 ->lists('house', 'house');
          return $school;
+       
+         
+    }
+     public function geSubjectCombinations() {
+         
+         
+         $combination = \DB::table('subjectcombination')->orderBy("Combination")
+                ->lists('Combination', 'Combination');
+         return  $combination;
        
          
     }
@@ -206,7 +215,7 @@ class SystemController extends Controller
     }
     public function getLecturer($lecturer){
         
-        $staff = \DB::table('tpoly_workers')->where('id',$lecturer)->get();
+        $staff = \DB::table('workers')->where('staffID',$lecturer)->get();
                  
         return @$staff;
      
@@ -419,18 +428,18 @@ if(@\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='HOD' ||@\Auth::use
     // this is purposely for select box 
     public function getLectureList() {
         
-         $lecturer = \DB::table('tpoly_workers')->where('designation','Lecturer')
-                 ->where('department',$user_department)->orderby("fullName")
-                ->lists('fullName', 'id');
+         $lecturer = \DB::table('workers')->where('designation','Teacher')
+                 ->where('department',$user_department)->orderby("Name")
+                ->lists('fullName', 'staffID');
          return $lecturer;
        
          
     }
      public function getLectureList_All() {
         
-         $lecturer = \DB::table('tpoly_workers')->orderby("fullName")
+         $lecturer = \DB::table('workers')->select("fullName","staffID")->orderby("Name")
                  
-                ->lists('fullName', 'id');
+                ->lists('fullName', 'staffID');
          return $lecturer;
        
          
@@ -444,14 +453,14 @@ if(@\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='HOD' ||@\Auth::use
          
     }
     public function department() {
-         $department= \DB::table('tpoly_department')->orderby("DEPARTMENT")
-                ->lists('DEPARTMENT', 'DEPTCODE');
+         $department= \DB::table('departments')->orderby("name")
+                ->lists('name', 'deptCode');
          return $department;
        
          
     }
     public function WASSCE_Grades() {
-         $grade= \DB::table('tbl_waec_grades_system')
+         $grade= \DB::table('waecgrades')
                 ->lists('grade', 'grade');
          return $grade;
        

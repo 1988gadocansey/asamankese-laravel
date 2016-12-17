@@ -37,25 +37,37 @@
                                     <div class=" parsley-row">
                                         <div class="uk-input-group">
                                             
-                                            <label for="wizard_email">Semester<span class="req uk-text-danger">*</span></label>
+                                            <label for="wizard_email">Term<span class="req uk-text-danger">*</span></label>
                                             <p></p>
-                                             {!!  Form::select('semester', array('1'=>'1st sem','2'=>'2nd sem','3' => '3rd sem' ), null, ['placeholder' => 'select semester','id'=>'parent','class'=>'md-input','required'=>'required','v-model'=>'semester','v-form-ctrl'=>'','v-select'=>'','style'=>'width:200px'],old("semester","")); !!}
+                                             {!!  Form::select('term', array('1'=>'1st term','2'=>'2nd term','3' => '3rd third' ), null, ['placeholder' => 'select semester','id'=>'parent','class'=>'md-input','required'=>'required','v-model'=>'semester','v-form-ctrl'=>'','v-select'=>'','style'=>'width:200px'],old("semester","")); !!}
                            
                                             <p class="uk-text-danger uk-text-small"  v-if="applicationForm.semester.$error.required" >Semester is required</p>
 
                                         </div>
                                     </div>
-                                   <!--  <div class="uk-grid">
-                                    <div class="uk-width-small-1-2 parsley-row">
-                                          <label>Program<span class="req uk-text-danger">(leave it if you want to open )</span></label>
-                                <p></p>
-                                        {!! Form::select('program', 
-                                (['' => 'select program'] +$programme ), 
-                                  old("program",""),
-                                    ['class' => 'md-input gad','style'=>'width:400px','v-model'=>'program', 'v-form-ctrl'=>'','v-select'=>''] )  !!}
-                                       
+                                   
+                                    <div class=" parsley-row">
+                                        <div class="uk-input-group">
+                                            
+                                            <label for="wizard_email">Start Date<span class="req uk-text-danger">*</span></label>
+                                            <p></p>
+                                             <input type="text" name="start" class="md-input" data-uk-datepicker="{format:'DD/MM/YYYY'}"   v-model="doa"  v-form-ctrl   >
+                                           
+                                            <p class="uk-text-danger uk-text-small"  v-if="applicationForm.semester.$error.required" >Start date is required</p>
+
+                                        </div>
                                     </div>
-                                </div>-->
+                                    
+                                    <div class=" parsley-row">
+                                        <div class="uk-input-group">
+                                            
+                                            <label for="wizard_email">End Date<span class="req uk-text-danger">*</span></label>
+                                            <p></p>
+                                            <input type="text" name="end" class="md-input" data-uk-datepicker="{format:'DD/MM/YYYY'}"   v-model="doa"  v-form-ctrl   >
+                                            <p class="uk-text-danger uk-text-small"  v-if="applicationForm.end.$error.required" >End date is required</p>
+
+                                        </div>
+                                    </div>
                                     
                                     
                                 </div>

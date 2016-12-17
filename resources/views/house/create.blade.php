@@ -15,7 +15,7 @@
  
 @endsection
 @section('content')
- <h5 class="heading_a">Create Programmes here</h5>
+ <h5 class="heading_a">Create Houses/Section</h5>
 <div class="uk-width-xLarge-1-10">
     <div class="md-card">
         <div class="md-card-content" style="">
@@ -25,25 +25,14 @@
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}"> 
                  <table id="paymentTable" class="uk-table"border="0" style="font-weight:bold">
 	  <tr id="paymentRow" payment_row="payment_row"> 
-              <td>Department &nbsp;
-	   {!! Form::select('department[]', 
-                                (['' => 'select department'] +$department ), 
-                                  old("department",""),
-                                    ['class' => 'md-input gad','style'=>'width:200px','v-model'=>'department','v-form-ctrl'=>'','v-select'=>''] )  !!}
-	  </td>
-	  <td valign="top">Programme Code &nbsp;<input type="text"  v-model='code[]' v-form-ctrl=''   class="md-input md-input"  name="code[]" style="width:auto;"></td>
-
-    
-          <td valign="top">Programme Name &nbsp;<input type="text"   class="md-input md-input" required=""   v-model='name[]' v-form-ctrl='' name="name[]" style="width:auto;"></td>
-
-          <td valign="top">Programme duration &nbsp;<input type="number"   class="md-input md-input" required="" v-model='duration[]' v-form-ctrl=''  name="duration[]" style="width:auto;"></td>
-
-          
-            <td>Grade &nbsp;
-	   {!! Form::select('grade[]', 
-                                (['' => 'select grade system'] +$grade ), 
-                                  old("grade[]",""),
-                                    ['class' => 'md-input gad','style'=>'width:200px','v-model'=>'grade','v-form-ctrl'=>'','v-select'=>''] )  !!}
+               
+	  <td valign="top">House Name &nbsp;<input type="text"  v-model='name[]' v-form-ctrl=''   class="md-input md-input"  name="name[]" style=""></td>
+ 
+            <td>House Master/Mistress &nbsp;
+	   {!! Form::select('staff[]', 
+                                (['' => 'select staff'] +$staff ), 
+                                  old("staff[]",""),
+                                    ['class' => 'md-input gad','style'=>'','v-model'=>'staff','v-form-ctrl'=>'','v-select'=>''] )  !!}
 	  </td>
           
 	  <td valign="top" id="insertPaymentCell"><button  type="button" id="insertPaymentRow" class="md-btn md-btn-primary md-btn-small " ><i class="sidebar-menu-icon material-icons">add</i></button></td></tr>

@@ -63,14 +63,16 @@
                         {{-- <h3 id="wizard_advanced-h-0" tabindex="-1" class="title current">Fill Form</h3> --}}
                         <section id="fill_form_section" role="tabpanel" aria-labelledby="fill form section" class="body step-0 current" data-step="0" aria-hidden="false"   v-bind:class="{'uk-hidden': in_payment_section} ">
 
+                        
                             <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
-
+                                 
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">First Name :</label><input type="text" id="fname" name="fname" class="md-input"   required="required"     v-model="fname"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.fname.$error.required">Please enter your first name</p>                                      
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">WAEC No</label><input type="text" id="waec" name="waec" class="md-input"       v-model="weac"  v-form-ctrl><span class="md-input-bar"></span></div>                
+                                       
+                                  
                                     </div>
                                 </div>
 
@@ -85,26 +87,29 @@
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_skype">Other Names :</label><input type="text" id="oname" name="othernames" v-form-ctrl  class="md-input"    v-model="othernames"      /><span class="md-input-bar"></span></div>         
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_skype">Other Names :</label><input type="text" id="othernames" name="othernames" v-form-ctrl required="" class="md-input"    v-model="othernames"      /><span class="md-input-bar"></span>
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.othernames.$error.required">Othername is required</p>                                        
+                               
+                                        </div>         
 
                                     </div>
                                 </div>
-
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Title :</label>     
+                                        <label for="">Electives Combinations :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('title',array("Mr"=>"Mr","Mrs"=>"Mrs","Miss"=>"Miss"),old('title',''),array('placeholder'=>'Select title',"required"=>"required","class"=>"md-input","v-model"=>"title","v-form-ctrl"=>"","v-select"=>"title"))  !!}
+                                            {!!   Form::select('combination',$combination,old('combination',''),array('placeholder'=>'Select subject combinations',"required"=>"required","class"=>"md-input","v-model"=>"combination","v-form-ctrl"=>"","v-select"=>"combination"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.title.$error.required">Title is required</p>                                        
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.combination.$error.required">Subject Combination is required</p>                                        
                                     </div>
                                 </div>
 
                             </div>
 
-                             <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+
+                                  <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
 
                                 <div class="parsley-row">
@@ -118,17 +123,15 @@
                                         <p class="uk-text-danger uk-text-small"  v-if="updateForm.gender.$error.required">Gender is required</p>                                        
                                     </div>
                                 </div>
+                                
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Marital Status :</label>     
-                                        <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('marital_status',array("Married"=>"Married",'Single'=>"Single"),old('marital_status',''),array('placeholder'=>'Select marital status',"required"=>"required","class"=>"md-input","v-model"=>"marital_status","v-form-ctrl"=>"","v-select"=>"marital_status"))  !!}
-                                            <span class="md-input-bar"></span>
-                                        </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.marital_status.$error.required">Marital Status is required</p>                                        
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_twitter">Date Admitted :</label><input type="text" name="doa" class="md-input" data-uk-datepicker="{format:'DD/MM/YYYY'}"   v-model="doa"  v-form-ctrl   ><span class="md-input-bar"></span></div>
+                                      
                                     </div>
                                 </div>
+
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
@@ -149,11 +152,11 @@
 
                             </div>
 
-               <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+                 <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
                                  <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_twitter">INDEX N<u>0</u> :</label><input type="text" name="indexno" class="md-input"    v-model="indexno"  v-form-ctrl   ><span class="md-input-bar"></span></div>
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_twitter">INDEX N<u>0</u> :</label><input type="text" name="indexno" class="md-input"  required="" v-model="indexno"  v-form-ctrl   ><span class="md-input-bar"></span></div>
                                              </div>
                                 </div>
 
@@ -183,19 +186,19 @@
                               
                                     </div>
                                 </div>
-                                <div class="parsley-row">
+                                 <div class="parsley-row">
                                     <div class="uk-input-group">
-
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Contact Address
-                                                :</label><input type="text" id="contact" name="contact" class="md-input"   required="required"    v-model="contact"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.contact.$error.required">Contact Address is required</p>                                      
+                                        
+                                         <div class="md-input-wrapper md-input-filled"><label for="wizard_email">Email :</label><input type="email" id="email" name="email" class="md-input"   v-model="email"v-form-ctrl  ><span class="md-input-bar"></span></div>                                            
+                                         <p class="uk-text-danger uk-text-small "  v-if="updateForm.email.$invalid"  >Please enter a valid email address</p>
+                                    
                                     </div>
                                 </div>
 
 
 
                             </div>
-                            <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+                             <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
 
                                 <div class="parsley-row">
@@ -233,29 +236,29 @@
                                   <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Student Category :</label>     
+                                        <label for="">Current Class :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('category',array("Regular"=>"Regular","Evening"=>"Evening","Weekend"=>"Weekend",'Exchange programme'=>'Exchange programme'),old('category',''),array('placeholder'=>'Select category',"required"=>"required","class"=>"md-input","v-model"=>"category","v-form-ctrl"=>"","v-select"=>"category"))  !!}
+                                            {!!   Form::select('class',$class,old('class',''),array('placeholder'=>'Select class',"required"=>"required","class"=>"md-input","v-model"=>"class","v-form-ctrl"=>"","v-select"=>"class"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.category.$error.required">Type is required</p>                                        
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.class.$error.required">Class is required</p>                                        
                                     </div>
                                 </div>
 
 
                             </div>
-                              <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+                               <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
 
                               <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Level/Year :</label>     
+                                        <label for="">Scholarship:</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('year',array('1'=>'1st year','2' => '2nd year', '3' => '3rd year','400/1'=>'BTECH level 1','400/2'=>'BTECH level 2'),old('year',''),array('placeholder'=>'Select year',"required"=>"required","class"=>"md-input","v-model"=>"year","v-form-ctrl"=>"","v-select"=>"year"))  !!}
+                                            {!!   Form::select('scholarship',array('Yes'=>'Yes','No' => 'No'),old('scholarship',''),array('placeholder'=>'Select Scholarship status',"required"=>"required","class"=>"md-input","v-model"=>"scholarship","v-form-ctrl"=>"","v-select"=>"scholarship"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.year.$error.required">year is required</p>                                        
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.scholarship.$error.required">Scholarship is required</p>                                        
                                     </div>
                                 </div>
 
@@ -264,19 +267,19 @@
 
                                         <label for="">Programme:</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                             {!!   Form::select('programme',$programme ,array("required"=>"required","class"=>"md-input","id"=>"programme","v-model"=>"programme","v-form-ctrl"=>"","v-select"=>"programme")   )  !!}
+                                             {!!   Form::select('programme',$programme ,array("required"=>"required","style"=>"width:230px" ,"class"=>"md-input","id"=>"programme","v-model"=>"programme","v-form-ctrl"=>"","v-select"=>"programme")   )  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
                                         <p class="uk-text-danger uk-text-small"  v-if="updateForm.programme.$error.required">programme is required</p>                                        
                                     </div>
                                 </div>
                                    
-                                  <div class="parsley-row" style="margin-left:80px">
+                                  <div class="parsley-row" style="margin-left:-83px">
                                     <div class="uk-input-group">
 
                                         <label for="">Residential Status :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('type',array("Resident"=>"Resident",'Non Resident'=>"Non Resident"),old('type',''),array('placeholder'=>'Select residential status', "style"=>"","class"=>"md-input","v-model"=>"type","v-form-ctrl"=>"","v-select"=>"type"))  !!}
+                                            {!!   Form::select('type',array("Boarder"=>"Boarder",'Day'=>"Day"),old('type',''),array('placeholder'=>'Select residential status', "style"=>"","class"=>"md-input","v-model"=>"type","v-form-ctrl"=>"","v-select"=>"type"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
                                          <p class="uk-text-danger uk-text-small"  v-if="updateForm.type.$error.required">Residential Status is required</p>                                        
@@ -284,26 +287,17 @@
                                     </div>
                                 </div>
                                    
-                                  <div class="parsley-row" v-if ="type=='Non Resident'">
+                                 
+                                <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                         
-                                       <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Hostel :</label><input type="text" id="hostel" name="hostel" class="md-input"   required="required"    v-model="hostel"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.hostel.$error.required">Hostel Name is required</p>                                      
-                                    
-
-                                       </div>
-                              </div>
-                                <div class="parsley-row" v-if ="type=='Resident'">
-                                    <div class="uk-input-group">
-
-                                        <label for="">Hall :</label>     
+                                        <label for="">Houses :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                          {!!   Form::select('halls',$hall,array("required"=>"required","class"=>"md-input","id"=>"halls","v-model"=>"halls","v-form-ctrl"=>"","style"=>"width: 226px;","v-select"=>"halls")   )  !!}
+                                          {!!   Form::select('house',$house,array("required"=>"required","class"=>"md-input house","id"=>"house","v-model"=>"house","v-form-ctrl"=>"","style"=>"width:120px","v-select"=>"house")   )  !!}
                                     <span class="md-input-bar"></span>
                                         </div> 
 
-                                      <p class="uk-text-danger uk-text-small"  v-if="updateForm.halls.$error.required">Hall is required</p>                                        
+                                      <p class="uk-text-danger uk-text-small"  v-if="updateForm.house.$error.required">House is required</p>                                        
                                   </div>
                               </div>
                             </div>
@@ -346,7 +340,7 @@
                                     <div class="uk-input-group">
 
                                          
-                                       <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Disabilty Name :</label><input type="text" id="disabilty" name="disabilty" class="md-input"   required="required"      v-model="disabilty"  v-form-ctrl><span class="md-input-bar"></span></div>                
+                                       <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Disabilty Name :</label><input type="text" id="disabilty" name="disabilty" class="md-input"       v-model="disabilty"  v-form-ctrl><span class="md-input-bar"></span></div>                
                                         
 
                                        </div>
@@ -358,12 +352,63 @@
                                         
                                     </div>
                                 </div>
-         <div class="parsley-row">
+                                 <div class="parsley-row">
                                     <div class="uk-input-group">
-                                        
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_email">BILLS:</label><input type="text" id="" name="bill" class="md-input"   disabled=""v-model="bill"v-form-ctrl  ><span class="md-input-bar"></span></div>                                            
-                                        
+
+                                        <label for="">Blood Group :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('blood',array("A-"=>"A-",'A+'=>"A+","AB-"=>"AB-","AB+"=>"AB+","O+"=>"O+"),old('blood',''),array('placeholder'=>'Select blood' ,"class"=>"md-input","v-model"=>"blood","v-form-ctrl"=>"","v-select"=>"blood"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
+                                </div>
+
+
+                            </div>
+            
+            <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+
+
+                               <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Former School :</label><input type="text" id="former" name="former" class="md-input"      v-model="former"  v-form-ctrl><span class="md-input-bar"></span></div>                
+                                       
                                     </div>
+                                </div>
+
+
+                               
+                                   
+                               <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Pupil lives with :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('lives',array("Parents"=>"Parents",'Mother'=>"Mother",'Father'=>"Father",'Sibling'=>"Sibling",'Relative'=>"Relative",'Care Taker'=>"Care Taker"),old('lives',''),array('placeholder'=>'Select Caretaker',"class"=>"md-input","v-model"=>"blood","v-form-ctrl"=>"","v-select"=>"blood"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
+                                </div>
+                                 <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Allergies :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('allergy',array("Positive"=>"Positive",'Negative'=>"Negative"),old('sickling',''),array('placeholder'=>'Select sickling status',"class"=>"md-input","v-model"=>"blood","v-form-ctrl"=>"","v-select"=>"blood"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
+                                </div>
+                                 <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Status :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('status',array("Alumni"=>"Completed",'In School'=>"In School",'Rasticated'=>"Rasticated",'Suspended'=>"Suspended",'Sick'=>"Sick",'Dead'=>"Dead"),old('status',''),array('placeholder'=>'Select Status',"class"=>"md-input","v-model"=>"status","v-form-ctrl"=>"","v-select"=>"status"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
                                 </div>
 
                             </div>
@@ -421,7 +466,7 @@
             </a>
         </li>
         <li class="button_finish "    aria-hidden="true"  v-show="updateForm.$valid && in_payment_section==true"  >
-            <input class="md-btn md-btn-primary uk-margin-small-top" type="submit" name="submit_order"  value="Submit"   v-on:click="submit_form"  />
+            <input class="md-btn md-btn-primary uk-margin-small-top" type="submit" name="submit_order"  value="Save"   v-on:click="submit_form"  />
         </li>
     </ul>
 </div>

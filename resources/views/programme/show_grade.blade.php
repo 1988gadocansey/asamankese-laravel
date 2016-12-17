@@ -79,7 +79,7 @@ border-radius: 0;
                         <td>
                             {!! Form::select('grade[]', 
                                 (['' => 'select grade'] +$grade ), 
-                                  old("grade",""),
+                                  old($row->grade,""),
                                     ['class' => 'md-input gad','style'=>'width:120px','required'=>'','v-model'=>'grade','v-form-ctrl'=>'','v-select'=>''] )  !!}
 	 
                         </td>

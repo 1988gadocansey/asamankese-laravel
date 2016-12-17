@@ -3,7 +3,12 @@
 
 @section('style')
 <style>
-    
+    .house{
+        width: 120px;
+    }
+     program{
+        width: 120px;
+    }
     
 </style>
   
@@ -14,16 +19,13 @@
     <div class="md-card">
         <div class="md-card-content" style="">
 
-             
-            <p class="uk-text-danger uk-text-center">  NB: Any update you want that is not where please contact ICT officer. Eg wrong programme or wrong date of birth or wrong photo.</p>
-              <p class="uk-text-danger uk-text-center"><blinks>All technical help contact  - Gad Ocansey, Computer Science Dept</blinks></p>
-        <div class=" " style="float: right;">
+              <div class=" " style="float: right;">
                     <div id=" " style="margin-left:0px" class=" ">
                         <div  class="fileinput fileinput-new" data-provides="fileinput" align="center">
                             <div class="fileinput-new thumbnail" style="width: 200px; height: 186px;">
                                 @inject('obj', 'App\Http\Controllers\SystemController')
 
-                                <img class="" style="width:180px;height: auto"  <?php $pic = $data->INDEXNO;
+                                <img class="" style="width:180px;height: auto"  <?php $pic = @$data->indexNo;
 echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   src="<?php echo url("public/albums/students/$pic.jpg") ?>" alt=" Picture of Student Here"    /></a> 
 
                             </div>
@@ -49,7 +51,7 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                             </li>
                             <li role="tab" class="payment_header disabled" aria-disabled="true"   v-bind:class="{ 'error' : in_payment_section}" >
                                 <a aria-controls="wizard_advanced-p-1" href="#wizard_advanced-h-1" id="wizard_advanced-t-1">
-                                    <span class="number">2</span> <span class="title">Guardian Info and Others</span>
+                                    <span class="number">2</span> <span class="title">Guardian Info and Medical Tests</span>
                                 </a>
                             </li>
                         </ul>
@@ -60,14 +62,16 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                         {{-- <h3 id="wizard_advanced-h-0" tabindex="-1" class="title current">Fill Form</h3> --}}
                         <section id="fill_form_section" role="tabpanel" aria-labelledby="fill form section" class="body step-0 current" data-step="0" aria-hidden="false"   v-bind:class="{'uk-hidden': in_payment_section} ">
 
+                        
                             <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
-                                @if( @\Auth::user()->role=="Support")
+                                 
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">First Name :</label><input type="text" id="fname" name="fname" class="md-input"   required="required"     v-model="fname"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.fname.$error.required">Please enter your first name</p>                                      
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">WAEC No</label><input type="text" id="waec" name="waec" class="md-input"       v-model="weac"  v-form-ctrl><span class="md-input-bar"></span></div>                
+                                       
+                                  
                                     </div>
                                 </div>
 
@@ -82,50 +86,29 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_skype">Other Names :</label><input type="text" id="oname" name="othernames" v-form-ctrl  class="md-input"    v-model="othernames"      /><span class="md-input-bar"></span></div>         
-
-                                    </div>
-                                </div>
-                                
-                                @else
-                                <div class="parsley-row">
-                                    <div class="uk-input-group">
-
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">First Name :</label><input type="text" id="fname" name="fname" class="md-input"   required="required"     v-model="fname"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.fname.$error.required">Please enter your first name</p>                                      
-                                    </div>
-                                </div>
-
-                                <div class="parsley-row">
-                                    <div class="uk-input-group">
-
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Last Name :</label><input type="text" id="surname" name="surname" class="md-input"   required="required"       v-model="surname"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.surname.$error.required">Please enter your surname</p>                                      
-                                    </div>
-                                </div>
-
-                                <div class="parsley-row">
-                                    <div class="uk-input-group">
-
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_skype">Other Names :</label><input type="text" id="oname" name="othernames" v-form-ctrl  class="md-input"    v-model="othernames"      /><span class="md-input-bar"></span></div>         
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_skype">Other Names :</label><input type="text" id="othernames" name="othernames" v-form-ctrl required="" class="md-input"    v-model="othernames"      /><span class="md-input-bar"></span>
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.othernames.$error.required">Othername is required</p>                                        
+                               
+                                        </div>         
 
                                     </div>
                                 </div>
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Title :</label>     
+                                        <label for="">Electives Combinations :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('title',array("Mr"=>"Mr","Mrs"=>"Mrs","Miss"=>"Miss"),old('title',''),array('placeholder'=>'Select title',"required"=>"required","class"=>"md-input","v-model"=>"title","v-form-ctrl"=>"","v-select"=>"title"))  !!}
+                                            {!!   Form::select('combination',$combination,old('combination',''),array('placeholder'=>'Select subject combinations',"required"=>"required","class"=>"md-input","v-model"=>"combination","v-form-ctrl"=>"","v-select"=>"combination"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.title.$error.required">Title is required</p>                                        
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.combination.$error.required">Subject Combination is required</p>                                        
                                     </div>
                                 </div>
 
                             </div>
 
-                             <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+
+                                  <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
 
                                 <div class="parsley-row">
@@ -139,17 +122,15 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                         <p class="uk-text-danger uk-text-small"  v-if="updateForm.gender.$error.required">Gender is required</p>                                        
                                     </div>
                                 </div>
+                                
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Marital Status :</label>     
-                                        <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('marital_status',array("Married"=>"Married",'Single'=>"Single"),old('marital_status',''),array('placeholder'=>'Select marital status',"required"=>"required","class"=>"md-input","v-model"=>"marital_status","v-form-ctrl"=>"","v-select"=>"marital_status"))  !!}
-                                            <span class="md-input-bar"></span>
-                                        </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.marital_status.$error.required">Marital Status is required</p>                                        
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_twitter">Date Admitted :</label><input type="text" name="doa" class="md-input" data-uk-datepicker="{format:'DD/MM/YYYY'}"   v-model="doa"  v-form-ctrl   ><span class="md-input-bar"></span></div>
+                                      
                                     </div>
                                 </div>
+
                                 <div class="parsley-row">
                                     <div class="uk-input-group">
 
@@ -170,11 +151,11 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
 
                             </div>
 
-               <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+                 <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
                                  <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_twitter">INDEX N<u>0</u> :</label><input type="text" name="indexno" class="md-input"  readonly=""  v-model="indexno"  v-form-ctrl   ><span class="md-input-bar"></span></div>
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_twitter">INDEX N<u>0</u> :</label><input type="text" name="indexno" class="md-input"  required="" v-model="indexno"  v-form-ctrl   ><span class="md-input-bar"></span></div>
                                              </div>
                                 </div>
 
@@ -204,19 +185,19 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                               
                                     </div>
                                 </div>
-                                <div class="parsley-row">
+                                 <div class="parsley-row">
                                     <div class="uk-input-group">
-
-                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Contact Address
-                                                :</label><input type="text" id="contact" name="contact" class="md-input"   required="required"    v-model="contact"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.contact.$error.required">Contact Address is required</p>                                      
+                                        
+                                         <div class="md-input-wrapper md-input-filled"><label for="wizard_email">Email :</label><input type="email" id="email" name="email" class="md-input"   v-model="email"v-form-ctrl  ><span class="md-input-bar"></span></div>                                            
+                                         <p class="uk-text-danger uk-text-small "  v-if="updateForm.email.$invalid"  >Please enter a valid email address</p>
+                                    
                                     </div>
                                 </div>
 
 
 
                             </div>
-                            <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+                             <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
 
                                 <div class="parsley-row">
@@ -254,29 +235,29 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                   <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Student Category :</label>     
+                                        <label for="">Current Class :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('category',array("Regular"=>"Regular","Evening"=>"Evening","Weekend"=>"Weekend",'Exchange programme'=>'Exchange programme'),old('category',''),array('placeholder'=>'Select category',"required"=>"required","class"=>"md-input","v-model"=>"category","v-form-ctrl"=>"","v-select"=>"category"))  !!}
+                                            {!!   Form::select('class',$class,old('class',''),array('placeholder'=>'Select class',"required"=>"required","class"=>"md-input","v-model"=>"class","v-form-ctrl"=>"","v-select"=>"class"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.category.$error.required">Type is required</p>                                        
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.class.$error.required">Class is required</p>                                        
                                     </div>
                                 </div>
 
 
                             </div>
-                              <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+                               <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
 
 
                               <div class="parsley-row">
                                     <div class="uk-input-group">
 
-                                        <label for="">Level/Year (As at last sem):</label>     
+                                        <label for="">Scholarship:</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('year',array('1'=>'1st year','2' => '2nd year', '3' => '3rd year','400/1'=>'BTECH level 1','400/2'=>'BTECH level 2'),old('year',''),array('placeholder'=>'Select year',"required"=>"required","class"=>"md-input","v-model"=>"year","v-form-ctrl"=>"","v-select"=>"year"))  !!}
+                                            {!!   Form::select('scholarship',array('Yes'=>'Yes','No' => 'No'),old('scholarship',''),array('placeholder'=>'Select Scholarship status',"required"=>"required","class"=>"md-input","v-model"=>"scholarship","v-form-ctrl"=>"","v-select"=>"scholarship"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
-                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.year.$error.required">year is required</p>                                        
+                                        <p class="uk-text-danger uk-text-small"  v-if="updateForm.scholarship.$error.required">Scholarship is required</p>                                        
                                     </div>
                                 </div>
 
@@ -285,19 +266,19 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
 
                                         <label for="">Programme:</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                             {!!   Form::select('programme',$programme ,array("required"=>"required","readonly"=>"","class"=>"md-input","id"=>"programme","v-model"=>"programme","v-form-ctrl"=>"","v-select"=>"programme")   )  !!}
+                                             {!!   Form::select('programme',$programme ,array("required"=>"required","style"=>"width:230px" ,"class"=>"md-input","id"=>"programme","v-model"=>"programme","v-form-ctrl"=>"","v-select"=>"programme")   )  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
                                         <p class="uk-text-danger uk-text-small"  v-if="updateForm.programme.$error.required">programme is required</p>                                        
                                     </div>
                                 </div>
                                    
-                                  <div class="parsley-row" style="margin-left:80px">
+                                  <div class="parsley-row" style="margin-left:-83px">
                                     <div class="uk-input-group">
 
                                         <label for="">Residential Status :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('type',array("Resident"=>"Resident",'Non Resident'=>"Non Resident"),old('type',''),array('placeholder'=>'Select residential status', "style"=>"","class"=>"md-input","v-model"=>"type","v-form-ctrl"=>"","v-select"=>"type"))  !!}
+                                            {!!   Form::select('type',array("Boarder"=>"Boarder",'Day'=>"Day"),old('type',''),array('placeholder'=>'Select residential status', "style"=>"","class"=>"md-input","v-model"=>"type","v-form-ctrl"=>"","v-select"=>"type"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
                                          <p class="uk-text-danger uk-text-small"  v-if="updateForm.type.$error.required">Residential Status is required</p>                                        
@@ -305,26 +286,17 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                     </div>
                                 </div>
                                    
-                                  <div class="parsley-row" v-if ="type=='Non Resident'">
+                                   
+                                <div class="parsley-row" >
                                     <div class="uk-input-group">
 
-                                         
-                                       <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Hostel :</label><input type="text" id="hostel" name="hostel" class="md-input"   required="required"    v-model="hostel"  v-form-ctrl><span class="md-input-bar"></span></div>                
-                                        <p  class=" uk-text-danger uk-text-small  "   v-if="updateForm.hostel.$error.required">Hostel Name is required</p>                                      
-                                    
-
-                                       </div>
-                              </div>
-                                <div class="parsley-row" v-if ="type=='Resident'">
-                                    <div class="uk-input-group">
-
-                                        <label for="">Hall :</label>     
+                                        <label for="">Houses/Sections :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                          {!!   Form::select('halls',$hall,array("required"=>"required","class"=>"md-input","id"=>"halls","v-model"=>"halls","v-form-ctrl"=>"","style"=>"width: 226px;","v-select"=>"halls")   )  !!}
+                                          {!!   Form::select('house',$house,array("required"=>"required","class"=>"md-input house","id"=>"house","v-model"=>"house","v-form-ctrl"=>"", "v-select"=>"house")   )  !!}
                                     <span class="md-input-bar"></span>
                                         </div> 
 
-                                      <p class="uk-text-danger uk-text-small"  v-if="updateForm.halls.$error.required">Hall is required</p>                                        
+                                      <p class="uk-text-danger uk-text-small"  v-if="updateForm.house.$error.required">House is required</p>                                        
                                   </div>
                               </div>
                             </div>
@@ -367,7 +339,7 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                     <div class="uk-input-group">
 
                                          
-                                       <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Disabilty Name :</label><input type="text" id="disabilty" name="disabilty" class="md-input"   required="required"      v-model="disabilty"  v-form-ctrl><span class="md-input-bar"></span></div>                
+                                       <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Disabilty Name :</label><input type="text" id="disabilty" name="disabilty" class="md-input"       v-model="disabilty"  v-form-ctrl><span class="md-input-bar"></span></div>                
                                         
 
                                        </div>
@@ -378,6 +350,64 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                         <div class="md-input-wrapper md-input-filled"><label for="wizard_email">NHIS N<u>O</u> :</label><input type="text" id="" name="nhis" class="md-input"   v-model="nhis"v-form-ctrl  ><span class="md-input-bar"></span></div>                                            
                                         
                                     </div>
+                                </div>
+                                 <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Blood Group :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('blood',array("A-"=>"A-",'A+'=>"A+","AB-"=>"AB-","AB+"=>"AB+","O+"=>"O+"),old('blood',''),array('placeholder'=>'Select blood' ,"class"=>"md-input","v-model"=>"blood","v-form-ctrl"=>"","v-select"=>"blood"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
+                                </div>
+
+
+                            </div>
+            
+            <div data-uk-grid-margin="" class="uk-grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4">
+
+
+                               <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <div class="md-input-wrapper md-input-filled"><label for="wizard_referer">Former School :</label><input type="text" id="former" name="former" class="md-input"      v-model="former"  v-form-ctrl><span class="md-input-bar"></span></div>                
+                                       
+                                    </div>
+                                </div>
+
+
+                               
+                                   
+                               <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Pupil lives with :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('lives',array("Parents"=>"Parents",'Mother'=>"Mother",'Father'=>"Father",'Sibling'=>"Sibling",'Relative'=>"Relative",'Care Taker'=>"Care Taker"),old('lives',''),array('placeholder'=>'Select Caretaker',"class"=>"md-input","v-model"=>"lives","v-form-ctrl"=>"","v-select"=>"lives"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
+                                </div>
+                                 <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Allergies :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('allergy',array("Positive"=>"Positive",'Negative'=>"Negative"),old('allergy',''),array('placeholder'=>'Select alergy',"class"=>"md-input","v-model"=>"allergy","v-form-ctrl"=>"","v-select"=>"allergy"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
+                                </div>
+                                 <div class="parsley-row">
+                                    <div class="uk-input-group">
+
+                                        <label for="">Status :</label>     
+                                        <div class="md-input-wrapper md-input-filled">
+                                            {!!   Form::select('status',array("Alumni"=>"Completed",'In School'=>"In School",'Rasticated'=>"Rasticated",'Suspended'=>"Suspended",'Sick'=>"Sick",'Dead'=>"Dead"),old('status',''),array('placeholder'=>'Select Status',"class"=>"md-input","v-model"=>"status","v-form-ctrl"=>"","v-select"=>"status"))  !!}
+                                            <span class="md-input-bar"></span>
+                                        </div>    
+                                      </div>
                                 </div>
 
                             </div>
@@ -418,7 +448,6 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
                                 </div>
 
                             </div>
-            @endif
 </section>
 
 </div>
@@ -436,13 +465,12 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
             </a>
         </li>
         <li class="button_finish "    aria-hidden="true"  v-show="updateForm.$valid && in_payment_section==true"  >
-            <input class="md-btn md-btn-primary uk-margin-small-top" type="submit" name="submit_order"  value="Submit"   v-on:click="submit_form"  />
+            <input class="md-btn md-btn-primary uk-margin-small-top" type="submit" name="submit_order"  value="Update"   v-on:click="submit_form"  />
         </li>
     </ul>
 </div>
 </div>
 </form>
-
             <div class="uk-modal" id="confirm_modal"   >
                 <div class="uk-modal-dialog"  v-el:confirm_modal>
                     <div class="uk-modal-header uk-text-large uk-text-success uk-text-center" >Confirm Data</div>
@@ -512,36 +540,38 @@ var vm = new Vue({
   ready : function() {
   },
  data : {
-  fname : "{{  $data->FIRSTNAME }}",
-  surname : "{{ $data->SURNAME }}",
-  othernames : "{{ $data->OTHERNAMES }}",
-  gender : "{{ $data->SEX }}",
-  marital_status: "{{  $data->MARITAL_STATUS }}",
-  address: "{{  $data->ADDRESS }}",
-  contact: "{{  $data->RESIDENTIAL_ADDRESS }}",
-   phone : "{{$data->TELEPHONENO }}",
-    title : "{{  $data->TITLE }}",
-    nhis : "{{  $data->NHIS }}",
-    indexno : "{{  $data->INDEXNO }}",
-    email : "{{  $data->EMAIL }}",
-    region : "{{  $data->REGION }}",
-    religion : "{{  $data->RELIGION }}",
-    dob : "{{  $data->DATEOFBIRTH }}",
-     hometown : "{{  $data->HOMETOWN }}",
-    programme : "{{  $data->PROGRAMMECODE }}",
-    country : "{{  $data->COUNTRY }}",
-    disability : "{{  $data->DISABILITY }}",
-    gname : "{{  $data->GUARDIAN_NAME }}",
-    gaddress: "{{  $data->GUARDIAN_ADDRESS }}",
-    gphone : "{{  $data->GUARDIAN_PHONE }}",
-    goccupation : "{{  $data->GUARDIAN_OCCUPATION }}",
-    hostel : "{{  $data->HOSTEL }}",
-    residential : "{{  $data->STUDENT_TYPE }}",
-    category : "{{  $data->TYPE }}",
-    halls : "{{  $data->HALL }}",
-    year : "{{  $data->YEAR }}",
-    disability : "{{  $data->DISABILITY }}",
-    
+  weac : "{{  $data->waecIndexNo }}",
+  surname : "{{ $data->surname }}",
+  othernames : "{{ $data->othernames }}",
+  gender : "{{ $data->gender }}",
+  doa: "{{  $data->dateAdmitted }}",
+  address: "{{  $data->address }}",
+  class: "{{  $data->currentClass }}",
+   phone : "{{$data->phone }}",
+   
+    nhis : "{{  $data->nhisNo }}",
+    indexno : "{{  $data->indexNo }}",
+    email : "{{  $data->email }}",
+    region : "{{  $data->region }}",
+    religion : "{{  $data->religion }}",
+    dob : "{{  $data->dob }}",
+    former : "{{  $data->formerSchool }}",
+     hometown : "{{  $data->hometown }}",
+    programme : "{{  $data->programme }}",
+    country : "{{  $data->nationality }}",
+    disable : "{{  $data->disability }}",
+    gname : "{{  $data->parentName }}",
+    gaddress: "{{  $data->parentAddress }}",
+    gphone : "{{  $data->parentPhone }}",
+    goccupation : "{{  $data->parentOccupation }}",
+    allergy : "{{  $data->allergies }}",
+    blood : "{{  $data->bloodGroup }}",
+    scholarship : "{{  $data->schoolarship }}",
+    type : "{{  $data->studentType }}",
+    house : "{{  $data->house }}",
+     lives : "{{  $data->studentLivesWith }}",
+     status : "{{  $data->status }}",
+      
  options: [      
     ],
     in_payment_section : false,

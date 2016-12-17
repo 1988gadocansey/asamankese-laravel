@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\GradeSystemModel;
+use App\Models;
  
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
  
-class GradeController extends Controller
+class HouseController extends Controller
 {
      
     /**
@@ -41,14 +41,21 @@ class GradeController extends Controller
      */
     public function index(Request $request)
     {
-        $data=  GradeSystemModel::where("value","!=","")->groupBy("type")->orderBy("type","ASC")->paginate(100);
-         return view('programme.grade_system')->with('data',$data);
+        $data= Models\HouseModel::where("house","!=","")->orderBy("house","ASC")->paginate(100);
+         return view('house.index')->with('data',$data);
     }
      
      
-    public function create(SystemController $sys) {
-        $grades=$sys->WASSCE_Grades();
-         return view('programme.create_grade')->with('grade', $grades);
+    public function create(Request $request,SystemController $sys) {
+         if ($request->isMethod("get")) {
+
+          
+             $staff=$sys->getLectureList_All();
+         return view('house.create')->with('staff', $staff);
+         }
+         else{
+             
+         }
     }
     public function show(Request $request, $type,SystemController $sys) {
          $data=  GradeSystemModel::where("type",$type)->paginate(100);
@@ -62,43 +69,41 @@ class GradeController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request,  SystemController $sys)
     {
          //dd($request);
           
         $this->validate($request, [
-            'grade' => 'required',
+            'name' => 'required',
          
-            'upper'=>'required',
-            'lower'=>'required',
-            'value'=>'required'
+            'staff'=>'required',
+             
         ]);
-
+         $array=$sys->getSemYear();
+                  
+         $year=$array[0]->year;
       
-      $total=count($request->input('value'));
+      $total=count($request->input('name'));
       
-      $type=$request->input('type');
-      $value=$request->input('value');
-      $upper=$request->input('upper');
-      $lower=$request->input('lower');
-      $grade=$request->input('grade');
+      $name=$request->input('name');
+      $staff=$request->input('staff');
+      
        
       for($i=0;$i<$total;$i++){
-         $data=new GradeSystemModel();
-         $data->grade=$grade[$i];
-         $data->lower=$lower[$i];
-         $data->upper=$upper[$i];
-         $data->value=$value[$i];
-         $data->type=$type;
+         $data=new Models\HouseModel();
+         $data->house=$name[$i];
+         $data->master=$staff[$i];
+         $data->year=$year;
+        
            
          $data->save();
           
       }
        if(!$data){
       
-          return redirect("/create_grade")->withErrors("<span style='font-weight:bold;font-size:13px;'>Grades could not be created!</span>");
+          return redirect("/house/create")->with("error","<span style='font-weight:bold;font-size:13px;'>Houses could not be created!</span>");
           }else{
-           return redirect("/grade_system")->with("success"," <span style='font-weight:bold;font-size:13px;'>Grades added successfully created!</span> ");
+           return redirect("/houses")->with("success"," <span style='font-weight:bold;font-size:13px;'>House added successfully created!</span> ");
               
               
           }

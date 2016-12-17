@@ -13,11 +13,12 @@
  
 @endsection
 @section('content')
+   <h5 class="heading_c">Editing {{$data->name}} </h5>
 <div class="uk-width-xLarge-1-10">
     <div class="md-card">
         <div class="md-card-content" style="">
 
-            <h5 class=" ">Editing {{$data->PROGRAMME}} </h5>
+         
             <form    id="form" accept-charset="utf-8" method="POST" name="applicationForm"  v-form>
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}"> 
                  <table id="paymentTable" class="uk-table"border="0" style="font-weight:bold">
@@ -28,16 +29,15 @@
                                   old("department",""),
                                     ['class' => 'md-input gad','style'=>'width:200px','v-model'=>'department','v-form-ctrl'=>'','v-select'=>''] )  !!}
 	  </td>
-	  <td valign="top">Programme Code &nbsp;<input type="text"  v-model='code' v-form-ctrl=''   class="md-input md-input" value='{{$data->PROGRAMMECODE}}' name="code" style="width:auto;"></td>
+	  <td valign="top">Programme Code &nbsp;<input type="text"  v-model='code' v-form-ctrl=''   class="md-input md-input" value='{{$data->code}}' name="code" style="width:auto;"></td>
 
     
-          <td valign="top">Programme Name &nbsp;<input type="text"   class="md-input md-input" required="" value='{{$data->PROGRAMME}}'   v-model='name' v-form-ctrl='' name="name" style="width:auto;"></td>
+          <td valign="top">Programme Name &nbsp;<input type="text"   class="md-input md-input" required="" value='{{$data->name}}'   v-model='name' v-form-ctrl='' name="name" style="width:auto;"></td>
 
-          <td valign="top">Programme duration &nbsp;<input type="number"   class="md-input md-input" required=""  value='{{$data->DURATION}}' v-model='duration' v-form-ctrl=''  name="duration" style="width:auto;"></td>
+          <td valign="top">Programme duration &nbsp;<input type="number"   class="md-input md-input" required=""  value='{{$data->duration}}' v-model='duration' v-form-ctrl=''  name="duration" style="width:auto;"></td>
 
           
-          <td valign="top">Minimum Credit &nbsp;<input type="number"    class="md-input md-input" required=""  value='{{$data->MINCREDITS}}' v-model='credit' v-form-ctrl=''  name="credit" style="width:auto;"></td>
-           <td>Grade &nbsp;
+            <td>Grade &nbsp;
 	   {!! Form::select('grade', 
                                 (['' => 'select grade system'] +$grade ), 
                                   old("grade[]",""),

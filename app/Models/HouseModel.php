@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class GradeSystemModel extends Model
+
+class HouseModel extends Model
 {
      use LogsActivity;
     //
@@ -14,11 +15,12 @@ class GradeSystemModel extends Model
      *
      * @var string
      */
-    protected $table = 'gradingsystem';
-    protected static $logAttributes = ['value', 'grade'];
+    protected $table = 'house';
+    protected static $logAttributes = ['name', 'staff','year'];
     protected $primaryKey="id";
-    
+    protected $guarded = ['id'];
     public $timestamps = false;
-    
-     
+   public function teacher(){
+        return $this->belongsTo('App\Models\WorkerModel', "master","staffID");
+    }
 }

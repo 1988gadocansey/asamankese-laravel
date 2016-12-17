@@ -35,14 +35,12 @@
          <table class="uk-table uk-table-hover uk-table-align-vertical uk-table-nowrap " id="gad"> 
              <thead>
                  <tr>
-                     <th>N<u>O</u></th>
+                <th>N<u>O</u></th>
                 <th>Department</th>
                 <th>Programme Code</th>
                 <th>Programme</th>
-                <th>Affiliated to</th>
                 <th>Duration</th>
-                <th>Minimum Credit</th>
-                <th>Maximum Credit</th>
+                
                 <th>Grading System</th>
                 <th>Action</th>
 
@@ -76,17 +74,17 @@
              
         },
         columns: [
-        {data: 'ID', name: 'ID'},
+        {data: 'id', name: 'id'},
             
-            {data: 'DEPTCODE', name: 'DEPTCODE'},
-            {data: 'PROGRAMMECODE', name: 'PROGRAMMECODE'},
-            {data: 'PROGRAMME', name: 'PROGRAMME'},
-            {data: 'AFFILAITION', name: 'AFFILAITION'},
-            {data: 'DURATION', name: 'DURATION'},
+            {data: 'deptCode', name: 'deptCode'},
+            {data: 'code', name: 'code'},
+            {data: 'name', name: 'name'},
+             
+            {data: 'duration', name: 'duration'},
           
-              {data: 'MINCREDITS', name: 'MINCREDITS'},
-               {data: 'MAXI_CREDIT', name: 'MAXI_CREDIT'},
-               {data: 'GRADING_SYSTEM', name: 'GRADING_SYSTEM'},
+           
+               {data: 'gradeSystem', name: 'gradeSystem'},
+             
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ]
     });

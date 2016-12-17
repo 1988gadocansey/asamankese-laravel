@@ -208,9 +208,12 @@
                                <li><a href='{!! url("/add_students") !!}'>Add Students</a></li>
                                <li><a href='{!! url("/create_grade") !!}'>Create Grading System</a></li>
                                <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
-                               <li><a href='{!! url("/classes/create") !!}'>Create Classing System</a></li>
-                               <li><a href='{!! url("/classes/view") !!}'>View Classing System</a></li>
-
+                                  <li><a href='{!! url("/calender") !!}'>Academic Calender</a></li>
+                                <li><a href='{!! url("/create_programme") !!}'>Add Programmes</a></li>
+                                 <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
+                                  <li><a href='{!! url("/house/create") !!}'>Create Houses</a></li>
+                                <li><a href='{!! url("/house/view") !!}'>View Houses</a></li>
+                 
                                @endif
                         </ul>
                     </div>
@@ -222,15 +225,14 @@
                     <div class="uk-dropdown uk-dropdown-scrollable">
                         <ul class="uk-nav uk-nav-dropdown">
                             @if( @Auth::user()->role=='Lecturer')
-                              <li><a href='{!! url("/mounted_view") !!}'>View Class Group</a></li>
-                              <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
+                            <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
                            <li><a href='{!! url("/upload/marks") !!}'>Upload Semester Marks</a></li>
                             <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
                               <li><a href='{!! url("/broadsheet/noticeboard") !!}'>Broadsheet Noticeboard</a></li>
                             
                           @elseif( @Auth::user()->role=='HOD')
-                          <li><a href='{!! url("/groups/create") !!}'>Create Class Groups</a></li>
-                            <li><a href='{!! url("/groups/") !!}'>View Class Groups</a></li>
+<!--                          <li><a href='{!! url("/groups/create") !!}'>Create Class Groups</a></li>
+                            <li><a href='{!! url("/groups/") !!}'>View Class Groups</a></li>-->
                             <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
                             <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
                             <li><a href='{!! url("/upload/courses") !!}'>Upload Bulk Courses</a></li>
@@ -239,60 +241,30 @@
                             
                               <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
                            
-                            <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
+                            <li><a href='{!! url("/mount_course") !!}'>Open Courses</a></li>
                              <li><a href='{!! url("/upload/mounted") !!}'>Upload Bulk Mounted Courses</a></li>
                             <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
                             <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
                            
                             <li><a href='{!! url("/transcript") !!}'>Transcript</a></li>
                              <li><a href='{!! url("/broadsheet/noticeboard") !!}'>Broadsheet Noticeboard</a></li>
-                            <li><a href='{!! url("/broadsheet/naptex") !!}'>Broadsheet Naptex</a></li>
+                             
                           
-                            @elseif( @Auth::user()->role=='Support')
-                          <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
-                         
-                             <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
+                             @elseif( @Auth::user()->department=='top' )
+                             <li><a href='{!! url("/courses") !!}'>View Courses</a></li> 
                             <li><a href='{!! url("/upload/courses") !!}'>Upload Bulk Courses</a></li>
-                                <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
-                           
-                            <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
+
                             <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                               <li><a href='{!! url("/transcript") !!}'>Transcript</a></li>
-                          
-                            @elseif( @Auth::user()->role=='Dean' || @Auth::user()->role=='Registrar')
-                           
-                            <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
-                            <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
-                            <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
-                        <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                           
-                             <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                             <li><a href='{!! url("/upload/marks") !!}'>Upload Semester Marks</a></li>
-                              <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
-                             <li><a href='{!! url("/transcript") !!}'>Transcript</a></li>
-                          
-                              <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
-                            @elseif( @Auth::user()->department=='top' )
-                            <li><a href='{!! url("/calender") !!}'>Academic Calender</a></li>
-                            <li><a href='{!! url("/create_programme") !!}'>Add Programmes</a></li>
-                            <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
-                            <li><a href='{!! url("/groups/create") !!}'>Create Class Groups</a></li>
-                            <li><a href='{!! url("/groups/") !!}'>View Class Groups</a></li>
-                             <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
-                             <li><a href='{!! url("/upload/courses") !!}'>Upload Bulk Courses</a></li>
-                            
-                         <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                          <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                            
-                             <li><a href='{!! url("/upload/marks") !!}'>Upload Semester Marks</a></li>
-                             <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
-                            
-                              <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
-                         <li><a href='{!! url("/broadsheet/noticeboard") !!}'>Broadsheet Noticeboard</a></li>
-                            <li><a href='{!! url("/broadsheet/naptex") !!}'>Broadsheet Naptex</a></li>
-                          
-                           <li><a href='{!! url("/transcript") !!}'>Transcript</a></li>
-                        
+                            <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
+
+                            <li><a href='{!! url("/upload/marks") !!}'>Upload Semester Marks</a></li>
+                            <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
+
+                            <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
+                            <li><a href='{!! url("/broadsheet/noticeboard") !!}'>Broadsheet Noticeboard</a></li>
+
+                            <li><a href='{!! url("/transcript") !!}'>Transcript</a></li>
+
                             @endif
                                </ul>
                     </div>

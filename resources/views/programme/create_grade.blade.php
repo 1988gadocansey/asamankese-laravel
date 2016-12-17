@@ -15,11 +15,12 @@
  
 @endsection
 @section('content')
+ <h5 class="heading_b">Grading System</h5>
 <div class="uk-width-xLarge-1-10">
     <div class="md-card">
         <div class="md-card-content" style="">
 
-            <h5 class=" ">Create Grade System here</h5>
+           
             <form    id="form" accept-charset="utf-8" method="POST" name="applicationForm"  v-form>
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}"> 
                 <div class="parsley-row">
@@ -27,7 +28,7 @@
 
                         <label for="wizard_phone">Programme Categories<span class="req uk-text-danger">*</span></label>
                         <p></p>
-                                             {!!  Form::select('type', array('HND'=>'HND','BTECH'=>'BTECH','DBS' => 'DBS','NON-T'=>'NON-TERTIARY' ), null, ['placeholder' => 'Select category','id'=>'parent','class'=>'md-input','required'=>'required','v-model'=>'type','v-form-ctrl'=>'','v-select'=>'','style'=>'width:200px'],old("type","")); !!}
+                                             {!!  Form::select('type', array('WASSCE'=>'WASSCE','GRE'=>'GRE','DBS' => 'DBS' ), null, ['placeholder' => 'Select category','id'=>'parent','class'=>'md-input','required'=>'required','v-model'=>'type','v-form-ctrl'=>'','v-select'=>'','style'=>'width:200px'],old("type","")); !!}
                             
                     </div>
                 </div>

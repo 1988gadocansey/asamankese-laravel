@@ -46,13 +46,13 @@ class ProgrammeController extends Controller
     public function anyData(Request $request)
     {
          
-        $program = ProgrammeModel::select([  'ID','DEPTCODE', 'PROGRAMMECODE','PROGRAMME','AFFILAITION','DURATION','MINCREDITS','MAXI_CREDIT','GRADING_SYSTEM']);
+        $program = ProgrammeModel::select([  'id','deptCode', 'code','name','gradeSystem','duration']);
 
 
         return Datatables::of($program)
               
              ->addColumn('action', function ($programme_) {
-                 return "<a href=\"edit_programme/$programme_->ID/id\" class=\"md-btn md-btn-primary md-btn-small md-btn-wave-light waves-effect waves-button waves-light\"><i title='click to edit' class=\"sidebar-menu-icon material-icons md-18\">edit</a>";
+                 return "<a href=\"edit_programme/$programme_->id/id\" class=\"md-btn md-btn-primary md-btn-small md-btn-wave-light waves-effect waves-button waves-light\"><i title='click to edit' class=\"sidebar-menu-icon material-icons md-18\">edit</a>";
             
                 //return' <td> <a href=" "><img class="" style="width:70px;height: auto" src="public/Albums/students/'.$student->INDEXNO.'.JPG" alt=" Picture of Employee Here"    /></a>df</td>';
                           
@@ -60,7 +60,7 @@ class ProgrammeController extends Controller
             })
             ->setRowId('id')
             ->setRowClass(function ($programme_) {
-                return $programme_->ID % 2 == 0 ? 'uk-text-success' : 'uk-text-warning';
+                return $programme_->id % 2 == 0 ? 'uk-text-success' : 'uk-text-warning';
             })
             ->setRowData([
                 'id' => 'test',
@@ -83,104 +83,11 @@ class ProgrammeController extends Controller
                  ->with('grade', $sys->getGradeSystemIDList());
          }
         else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
+          return   view("unauthorized");
+            }
          
     }
-    public function createClass(SystemController $sys) {
-       if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=='top'){
-       
-        // return view('programme.create_class');
-                  $this->validate($request, [
-            'lower' => 'required',
-            'upper'=>'required',
-            'class'=>'required',
-             
-        ]);
-        
-      
-      $total=count($request->input('lower'));
-      $class=$request->input('class');
-      $upper=$request->input('upper');
-      $lower=$request->input('lower');
-      
-       
-      for($i=0;$i<$total;$i++){
-         $classModel=new App\Models\ClassModel();
-          
-         $classModel->lowerBoundary=$lower[$i];
-         $classModel->upperBoundary=$upper[$i];
-         $classModel->class=$class[$i];
-            
-         $classModel->save();
-          
-      }
-       if(!$classModel){
-      
-          return redirect("classes/create")->withErrors(" <span style='font-weight:bold;font-size:13px;'>Classes could not be created </span>could not be added!");
-          }else{
-           return redirect("classes/view")->with("success","<span style='font-weight:bold;font-size:13px;'> Classes successfully created!</span> ");
-              
-              
-          }
-        }
-        else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
-         
-    }
-    public function storeClass(Request $request){
-        if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=='top'){
-       
-          
-                  $this->validate($request, [
-            'lower' => 'required',
-            'upper'=>'required',
-            'class'=>'required',
-             
-        ]);
-        
-      
-      $total=count($request->input('lower'));
-      $class=$request->input('class');
-      $upper=$request->input('upper');
-      $lower=$request->input('lower');
-      
-       
-      for($i=0;$i<$total;$i++){
-         $classModel= new Models\ClassModel();
-          
-         $classModel->lowerBoundary=$lower[$i];
-         $classModel->upperBoundary=$upper[$i];
-         $classModel->class=$class[$i];
-            
-         $classModel->save();
-          
-      }
-       if(!$classModel){
-      
-          return redirect("classes/create")->withErrors(" <span style='font-weight:bold;font-size:13px;'>Classes could not be created </span>could not be added!");
-          }else{
-           return redirect("classes/view")->with("success","<span style='font-weight:bold;font-size:13px;'> Classes successfully created!</span> ");
-              
-              
-          }
-        }
-        else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
-    }
-    public function viewClasses(Request $request ) {
-         if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=='top'){
-       
-         $data= Models\ClassModel::where('id','!=','')->paginate(100);
-         return view('programme.classes')->with('data',$data);
-     }
-         else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
-    }
-    /**
+     /**
      * Create a new task.
      *
      * @param  Request  $request
@@ -189,13 +96,13 @@ class ProgrammeController extends Controller
     public function store(Request $request)
     {
          
-      if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=='top'){
+      if(@\Auth::user()->role=='Admin' || @\Auth::user()->department=='top'){
         $this->validate($request, [
             'name' => 'required',
             'department'=>'required',
             'code'=>'required',
             'duration'=>'required',
-            'credit'=>'required',
+           
             'grade'=>'required',
         ]);
         //$this->validate($request, [
@@ -207,18 +114,18 @@ class ProgrammeController extends Controller
       $name=$request->input('name');
       $department=$request->input('department');
       $duration=$request->input('duration');
-      $credit=$request->input('credit');
+      
       $code=$request->input('code');
       $grade=$request->input('grade');
        
       for($i=0;$i<$total;$i++){
          $program=new ProgrammeModel();
-         $program->DEPTCODE=$department[$i];
-         $program->PROGRAMMECODE=$code[$i];
-         $program->PROGRAMME=$name[$i];
-         $program->DURATION=$duration[$i];
-         $program->MINCREDITS=$credit[$i];
-         $program->GRADING_SYSTEM=$grade[$i];
+         $program->code=$department[$i];
+         $program->deptCode=$code[$i];
+         $program->name=$name[$i];
+         $program->duration=$duration[$i];
+       
+         $program->gradeSystem=$grade[$i];
            
          $program->save();
           
@@ -232,14 +139,14 @@ class ProgrammeController extends Controller
               
       }}
         else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
+            return redirect("/dashboard");
         }
           
        
     }
     // show form for edit resource
     public function edit($id, SystemController $sys){
-        if(@\Auth::user()->role=='Dean'){
+        if(@\Auth::user()->role=='Admin' ||  @\Auth::user()->department=='top'){
         $programme= ProgrammeModel::where("ID", $id)->firstOrFail();
         $department=$sys->department();
          return view('programme.edit')->with('department', $department)
@@ -247,34 +154,36 @@ class ProgrammeController extends Controller
                  ->with('data', $programme);
          }
         else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
+         return view("unauthorized");
+            }
     }
 
     public function update(Request $request, $id){
-      if(@\Auth::user()->role=='Dean'){
+      if(@\Auth::user()->role=='Admin'  ||  @\Auth::user()->department=='top'){
         \DB::beginTransaction();
         try {
         $name = $request->input('name');
         $department = $request->input('department');
         $duration = $request->input('duration');
-        $credit = $request->input('credit');
+       
         $code = $request->input('code');
         $grade = $request->input('grade');
-        $query = ProgrammeModel::where("ID", $id)->update(array("PROGRAMME" => $name, "PROGRAMMECODE" => $code, "DURATION" => $duration, "GRADING_SYSTEM" => $grade, "DEPTCODE" => $department, "MINCREDITS" => $credit));
-        
+        $query = ProgrammeModel::where("id", $id)->update(array("name" => $name, "code" => $code, "duration" => $duration, "gradeSystem" => $grade, "deptCode" => $department));
+          \DB::commit();
         if (!$query) {
 
-            return redirect("/programmes")->withErrors("Following banks N<u>o</u> :<span style='font-weight:bold;font-size:13px;'> $name could not be updated!</span>");
+            return redirect("/programmes")->withErrors("<u>o</u> :<span style='font-weight:bold;font-size:13px;'> $name could not be updated!</span>");
         } else {
-            return redirect("/programmes")->with("success", "Following banks:<span style='font-weight:bold;font-size:13px;'> $name successfully updated!</span> ");
+            return redirect("/programmes")->with("success", "<span style='font-weight:bold;font-size:13px;'> $name successfully updated!</span> ");
         }
          } catch (\Exception $e) {
             \DB::rollback();
         }
         }
         else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
+           
+            
+             return view("unauthorized");
         }
     }
     /**

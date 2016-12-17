@@ -15,8 +15,8 @@ class AcademicCalenderModel extends Model
      * @var string
      */
     protected $table = 'academicsettings';
-    protected static $logAttributes = ['YEAR', 'SEMESTER','STATUS','ENTER_RESULT'];
+    protected static $logAttributes = ['year', 'term','startDate','endDate'];
     protected $primaryKey="ID";
-    protected $guarded=array ('ID');
+    protected $guarded=array ('id');
      public $timestamps = false;
 }

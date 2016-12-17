@@ -289,11 +289,11 @@
  
                         <tr align="">
                             <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
-                            <td> {{ strtoupper(@$row->NAME) }}</td>
+                            <td> {{ strtoupper(@$row->name) }}</td>
                             <td> <img class=" " style="width:65px;height:70px" src='{{url("public/albums/students/$row->indexNo.JPG")}} 'alt="photo"    /></td> 
                             <td> {{ @$row->indexNo }}</td>
 
-                            <td>{!! strtoupper(@$row->program->PROGRAMME) !!}</td>
+                            <td>{!! strtoupper(@$row->program->name) !!}</td>
                             <td> {{ @$row->currentClass }}</td>
                             <td> {{ strtoupper(@$row->gender) }}</td>
                             <td> {{ @$row->age }}yrs</td>
@@ -311,7 +311,7 @@
                              @if( @\Auth::user()->department=="top"||  @\Auth::user()->role=="HOD")
 
                             <td>
-                                <a href='{{url("edit_student/$row->ID/id")}}' >Edit</a>
+                                <a href='{{url("edit_student/$row->id/id")}}' >Edit</a>
                                 <a onclick="return MM_openBrWindow('{{url("/student_show/$row->id/id")}}', 'mark', 'width=800,height=500')" >View</a>
 
                             </td>

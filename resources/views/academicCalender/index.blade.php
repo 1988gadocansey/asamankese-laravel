@@ -43,8 +43,8 @@
                  <tr>
                 <th class="filter-false remove sorter-false" data-priority="6">NO</th>
                 <th>Academic Year</th>
-                <th>Semester</th>
-                <th>Online Registration Status</th>
+                <th>Term</th>
+                
                 <th>Entering of Mark Status</th>
                  <th  class="filter-false remove sorter-false uk-text-center" colspan="2" data-priority="1">ACTION</th>   
                      
@@ -56,18 +56,18 @@
  
                  <tr align="">
                      <td  class="uk-width-2-10"> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
-                     <td class="uk-text-primary uk-text-bold"> {{ @$row->YEAR }}</td>
-                     <td class="uk-text-primary uk-text-bold  "> {{ @$row->SEMESTER}}</td>
+                     <td class="uk-text-primary uk-text-bold"> {{ @$row->year }}</td>
+                     <td class="uk-text-primary uk-text-bold  "> {{ @$row->term}}</td>
                         </td>
                      <td class="uk-text-center">
-                         @if($row->STATUS==1)<span class="uk-badge uk-badge-success">Opened</span>
-                         <span> <a href='{{url("fireCalender/$row->ID/id/closeReg/action")}}' ><i title='Click to close online registration' onclick="return confirm('Are you sure you want to close online registration?' );" class="md-icon material-icons uk-text-danger">edit</i></span>
-                       @else <span class="uk-badge uk-badge-danger">Closed</span>&nbsp;&nbsp;<span> <a href='{{url("fireCalender/$row->ID/id/openReg/action")}}' ><i title='Click to open online registration' onclick="return confirm('Are you sure you want to open online registration?' );" class="md-icon material-icons uk-text-success">edit</i></span> @endif</td>
+                         @if($row->status==1)<span class="uk-badge uk-badge-success">Opened</span>
+                         <span> <a href='{{url("fireCalender/$row->ID/id/closeReg/action")}}' ><i title='Click to close entering of marks' onclick="return confirm('Are you sure you want to close entering of marks?' );" class="md-icon material-icons uk-text-danger">edit</i></span>
+                       @else <span class="uk-badge uk-badge-danger">Closed</span>&nbsp;&nbsp;<span> <a href='{{url("fireCalender/$row->ID/id/openReg/action")}}' ><i title='Click to open entering of marks' onclick="return confirm('Are you sure you want to open entering of marks?' );" class="md-icon material-icons uk-text-success">edit</i></span> @endif</td>
                      
                  
-                <td class="uk-text-center">@if($row->ENTER_RESULT==1)<span class="uk-badge uk-badge-success">Opened</span><span> <a href='{{url("fireCalender/$row->ID/id/closeMark/action")}}' ><i title='Click to close entering of marks' onclick="return confirm('Are you sure you want to close entering of marks?' );" class="md-icon material-icons uk-text-danger">edit</i></span> @else <span class="uk-badge uk-badge-danger">Closed</span>&nbsp;&nbsp;<span> <a href='{{url("fireCalender/$row->ID/id/openMark/action")}}' ><i onclick="return confirm('Are you sure you want to open entering of marks?' );" title='Click to open online registration'  class="md-icon material-icons uk-text-success">edit</i></span> @endif</td>
+                <td class="uk-text-center">@if($row->enterResult==1)<span class="uk-badge uk-badge-success">Opened</span><span> <a href='{{url("fireCalender/$row->ID/id/closeMark/action")}}' ><i title='Click to close entering of marks' onclick="return confirm('Are you sure you want to close entering of marks?' );" class="md-icon material-icons uk-text-danger">edit</i></span> @else <span class="uk-badge uk-badge-danger">Closed</span>&nbsp;&nbsp;<span> <a href='{{url("fireCalender/$row->ID/id/openMark/action")}}' ><i onclick="return confirm('Are you sure you want to open entering of marks?' );" title='Click to open entering of marks'  class="md-icon material-icons uk-text-success">edit</i></span> @endif</td>
                 <td class="uk-text-center">
-                    @if($row->ENTER_RESULT==0 &&$row->STATUS==0)
+                    @if($row->enterResult==0 &&$row->status==0)
                       {!!Form::open(['action' => ['AcademicCalenderController@destroy', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'myform' ,'style' => 'display: inline;'])  !!}
 
                                                    <i onclick="UIkit.modal.confirm('Are you sure you want to delete this item?', function(){ document.forms[0].submit(); });" title="click to delete calender" class="sidebar-menu-icon material-icons md-18 uk-text-danger">delete</i>
