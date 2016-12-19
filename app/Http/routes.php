@@ -163,7 +163,7 @@ Route::group(['middleware' => ['web']], function () {
    
     Route::get('/grade_system/{type}/slug','GradeController@show');
     Route::post('/update_grades/','GradeController@update');
-    Route::get('/houses','HouseController@index');
+    Route::get('/house/view','HouseController@index');
     Route::post('/houses','HouseController@update');
     Route::get('/house/create', "HouseController@create");
     Route::post('/house/create','HouseController@store');

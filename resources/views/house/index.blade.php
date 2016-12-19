@@ -75,21 +75,24 @@
                            
      </div>
  </div>
-  
+  @inject('sys', 'App\Http\Controllers\SystemController')
  <h5 class="heading_b">Houses</h5>
  <div class="uk-width-xLarge-1-1">
     <div class="md-card">
         <div class="md-card-content">
    <div class="uk-overflow-container" id='print'>
          <center><span class="uk-text-success uk-text-bold">{!! $data->total()!!} Records</span></center>
-                <table class="uk-table uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_pager_filter"> 
+                <table class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_pager_filter"> 
                <thead>
                  <tr>
-                     <th class="filter-false remove sorter-false" data-priority="6">No</th>
+                     <th class="filter-false remove sorter-false" data-priority="1">No</th>
                       <th>House Name</th>
-                     <th  style="text-align:center">Master/Mistress</th>
+                     <th  style="text-align:">Master/Mistress</th>
                      
                      <th style="text-align:center">Academic Year</th>
+                     <th style="text-align:center">Total Males</th>
+                     <th style="text-align:center">Total Females</th>
+                     <th style="text-align:center">Total Students</th>
 
                       
                       
@@ -106,13 +109,14 @@
                                             <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
                                             <td> {{ strtoupper(@$row->house) }}</td>
                                             <td> {{ @$row->teacher->fullName	 }}</td>
-                                            <td> {{ @$row->year	 }}</td>
+                                            <td style="text-align:center"> {{ @$row->year	 }}</td>
+                                            <td style="text-align:center"> {{ @$sys->getTotalGenderByHouse($row->house,"Male")}}</td>
+                                            <td style="text-align:center"> {{ @$sys->getTotalGenderByHouse($row->house,"Female")}}</td>
+                                            <td style="text-align:center"> {{@$sys->getTotalGenderByHouse($row->house,"Male") + @$sys->getTotalGenderByHouse($row->house,"Female")	 }}</td>
                                            
-                                           
-                                            <td> 
+                                            <td style="text-align:center"> 
                                                 
-<!--                                             <a href='{{url("edit_course/$row->ID/id")}}' ><i title='Click to edit course' class="md-icon material-icons">edit</i></a> 
-                                                -->
+                                      
                                              {!!Form::open(['action' =>['CourseController@destroy', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'c' ,'style' => 'display: inline;'])  !!}
 
                                                       <button type="submit" onclick="return confirm('Are you sure you want to delete   {{$row->COURSE_NAME}} -  {{ @$row->programme->PROGRAMME	 }}?')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>

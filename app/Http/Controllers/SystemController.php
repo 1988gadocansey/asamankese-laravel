@@ -134,6 +134,15 @@ class SystemController extends Controller
        
          
     }
+    public function getTotalGenderByHouse($house,$gender) {
+         
+         
+         $total= \DB::table('student')->where("house",$house)->where("gender",$gender)
+                ->count();
+         return $total;
+       
+         
+    }
     
     public function getProgrammeTypes() {
          
