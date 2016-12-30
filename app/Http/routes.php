@@ -167,6 +167,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/houses','HouseController@update');
     Route::get('/house/create', "HouseController@create");
     Route::post('/house/create','HouseController@store');
+    Route::get('/house/{id}/edit','HouseController@edit');
+    Route::post('/house/{id}/edit','HouseController@update');
     
     //Academic Modules
     

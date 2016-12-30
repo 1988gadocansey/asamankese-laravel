@@ -108,20 +108,20 @@
                                         <tr align="">
                                             <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
                                             <td> {{ strtoupper(@$row->house) }}</td>
-                                            <td> {{ @$row->teacher->fullName	 }}</td>
+                                            <td> {{ strtoupper(@$row->teacher->fullName)	 }}</td>
                                             <td style="text-align:center"> {{ @$row->year	 }}</td>
                                             <td style="text-align:center"> {{ @$sys->getTotalGenderByHouse($row->house,"Male")}}</td>
                                             <td style="text-align:center"> {{ @$sys->getTotalGenderByHouse($row->house,"Female")}}</td>
                                             <td style="text-align:center"> {{@$sys->getTotalGenderByHouse($row->house,"Male") + @$sys->getTotalGenderByHouse($row->house,"Female")	 }}</td>
                                            
-                                            <td style="text-align:center"> 
-                                                
-                                      
-                                             {!!Form::open(['action' =>['CourseController@destroy', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'c' ,'style' => 'display: inline;'])  !!}
+                                            <td>
+                                                 <a href='{{url("/house/$row->id/edit")}}'><i  title="click to edit house info" class="md-icon material-icons">&#xE254;</i></a>
+                                              {!!Form::open(['action' =>['CourseController@destroy_mounted', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'myform' ,'style' => 'display: inline;'])  !!}
 
-                                                      <button type="submit" onclick="return confirm('Are you sure you want to delete   {{$row->COURSE_NAME}} -  {{ @$row->programme->PROGRAMME	 }}?')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
+                                                    <button type="submit" onclick="return confirm('Are you sure you want to delete   {{ @$row->course->programme->PROGRAMME	 }}-{!! @$row->course->COURSE_NAME !!}')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
                                                         
                                                      {!! Form::close() !!}
+
                                             </td>
                                           
                                         </tr>

@@ -218,7 +218,23 @@
                         </ul>
                     </div>
                 </li>
-                
+                 <li data-uk-dropdown class="uk-hidden-small">
+
+                  
+                    <a href="#"><i class="sidebar-menu-icon material-icons md-18">home</i><span>Domentories</span></a>
+                    <div class="uk-dropdown uk-dropdown-scrollable">
+                        <ul class="uk-nav uk-nav-dropdown">
+                            <li><a href='{!! url("/students") !!}'>Rooms</a></li>
+                            
+                          
+                               @if( @Auth::user()->department=='top' )
+                               <li><a href='{!! url("/upload/students") !!}'>CheckIn Student</a></li>
+                          	   
+                                
+                               @endif
+                        </ul>
+                    </div>
+                </li>           
             @if(@Auth::user()->role=='Dean' || @Auth::user()->role=='Registrar'|| @Auth::user()->role=='HOD'  || @Auth::user()->role=='Support' || @Auth::user()->role=='Lecturer' || @Auth::user()->department=='top')
                 <li data-uk-dropdown class="uk-hidden-small">
                     <a href="#"><i class="sidebar-menu-icon material-icons md-18">book</i><span>Academics Modules</span></a>
