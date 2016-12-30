@@ -39,7 +39,7 @@
     @yield('style')
 
 </head>
-<body class="top_menu">
+<body class="top_menu" ng-app="asasco" ng-controller="pageController">
     <!-- main header -->
     <header id="header_main">
         <div class="header_main_content">
@@ -224,7 +224,7 @@
                     <a href="#"><i class="sidebar-menu-icon material-icons md-18">home</i><span>Domentories</span></a>
                     <div class="uk-dropdown uk-dropdown-scrollable">
                         <ul class="uk-nav uk-nav-dropdown">
-                            <li><a href='{!! url("/students") !!}'>Rooms</a></li>
+                            <li><a href='{!! url("/domentories/") !!}'>Rooms</a></li>
                             
                           
                                @if( @Auth::user()->department=='top' )
@@ -381,23 +381,28 @@
                     </div>
                 </li>
                 @endif
-                 @if( @Auth::user()->department=='LA')
+                 
+                  
                 <li data-uk-dropdown class="uk-hidden-small">
-                    <a href="#"> <i class="sidebar-menu-icon material-icons">work</i><span>Laiason Module</span></a>
+                    <a href="#"> <span class="menu_icon"><i class="material-icons">account_balance</i></span><span>Library</span></a>
                     <div class="uk-dropdown uk-dropdown-scrollable">
                         <ul class="uk-nav uk-nav-dropdown">
+                            <li><a href='{!! url("/search_password") !!}'>Search student password</a></li>
+                              <li><a href='{!! url("/power_users") !!}'>View Users</a></li>
+                               <li><a href='{!! url("/systems/synchronizations") !!}'>System Synchronizations</a></li>
+                            <li><a href='{!! url("/systems/view") !!}'>System Settings</a></li>
+                            <li><a href='{!! url("/systems/sms") !!}'>Sms Logs</a></li>
+                            <li><a href='{!! url("/systems/user/logs") !!}'>User Logs</a></li>
+                            
+                             <li><a href='{!! url("/logs") !!}'>System Error Logs</a></li>
 
-                            <li><a href='{!! url("fee_summary") !!}'>View Attachment Data</a></li>
-
-                            <li><a href='{!! url("fee_summary") !!}'>Attachment Reports</a></li>
-                            <li><a href='{!! url("fee_summary") !!}'>Close or open online system</a></li>
-
+                             <li><a href='{!! url("/change_password") !!}'>Change Password</a></li>
+                             <li><a href='{!! url("/logout") !!}'>Logout</a></li>
                         </ul>
                     </div>
                 </li>
-                @endif
                  
-                 @if( @Auth::user()->role=='Admin' || @Auth::user()->department=='top')
+                 @if( @Auth::user()->role=='Admin')
                 <li data-uk-dropdown class="uk-hidden-small">
                     <a href="#"> <span class="menu_icon"><i class="material-icons">&#xE8C0;</i></span><span>Settings</span></a>
                     <div class="uk-dropdown uk-dropdown-scrollable">
@@ -411,23 +416,13 @@
                             
                              <li><a href='{!! url("/logs") !!}'>System Error Logs</a></li>
 
-                           
+                             <li><a href='{!! url("/change_password") !!}'>Change Password</a></li>
+                             <li><a href='{!! url("/logout") !!}'>Logout</a></li>
                         </ul>
                     </div>
                 </li>
                 @endif
-                 @if( @Auth::user()->role=='Admin' || @Auth::user()->role=='Support')
-                 <li data-uk-dropdown class="uk-hidden-small">
-                    <a href="#"> <span class="menu_icon"><i class="material-icons">user</i></span><span>User Support</span></a>
-                    <div class="uk-dropdown uk-dropdown-scrollable">
-                        <ul class="uk-nav uk-nav-dropdown">
-                           
-                               <li><a href='{!! url("/search_password") !!}'>Search student passwords</a></li>
-                        </ul>
-                    </div>
-                </li>
-                 
-                  @endif
+                  @if( @Auth::user()->role!='Admin')
                  <li data-uk-dropdown class="uk-hidden-small">
                     <a href="#"> <span class="menu_icon"><i class="material-icons">lock</i></span><span>My Account</span></a>
                     <div class="uk-dropdown uk-dropdown-scrollable">
@@ -439,102 +434,14 @@
                         </ul>
                     </div>
                 </li>
-               
+                @endif
             <li data-uk-dropdown="justify:'#top_bar'" class="uk-visible-small">
                 <a href="#"><i class="material-icons">&#xE5D2;</i><span>Menu</span></a>
                 <div class="uk-dropdown uk-dropdown-width-2">
                     <div class="uk-grid uk-dropdown-grid" data-uk-grid-margin>
                         <div class="uk-width-1-2">
                             <ul class="uk-nav uk-nav-dropdown ">
-                           @if( @Auth::user()->department=='top' )
-                               <li><a href='{!! url("/students") !!}'>Students</a></li>
-                            <li><a href='{!! url("/create_programme") !!}'>Add Programmes</a></li>
-                            <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
-                             <li><a href='{!! url("/create_grade") !!}'>Create Grading System</a></li>
-                              <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
-                              <li><a href='{!! url("/calender") !!}'>Academic Calender</a></li>
-                               <li><a href='{!! url("/add_students") !!}'>Add Students</a></li>
-                            
-                             <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
-                            <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
-                            <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
-                            <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                            <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
-                           <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                            <li><a href='#'>Broadsheet</a></li>
-                   
-                            
-                             @elseif( @Auth::user()->role=='Lecturer')
-                               <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                          @elseif( @Auth::user()->role=='HOD')
-                           <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
-                            <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
-                            <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
-                            <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                            <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
-                           <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                   
-                            @elseif( @Auth::user()->role=='Dean')
-                           <li><a href='{!! url("/create_programme") !!}'>Add Programmes</a></li>
-                            <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
-                             <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
-                            <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                           
-                            <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
-                            <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
-                            <li><a href='{!! url("/attendanceSheet") !!}'>Print Exam Attendance Sheet</a></li>
-                             <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                   
-                             @elseif( @Auth::user()->role=='FO')
-                             <li><a href='{!! url("view_payments") !!}'>Transactions Ledger</a></li>
-
-                            <li><a href='{!! url("view_payments_master") !!}'>Master Fee Payment Report</a></li>
-
-                            <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
-                            
-                            <li><a href='{!! url("fee_summary") !!}'>Fee Summary</a></li>
-             
-                             <li><a href='{!! url("/upload_students") !!}'>Upload bulk Student data</a></li>
-                           <li><a href='{!! url("/upload_applicants") !!}'>Upload bulk Applicants data</a></li>
-                          <li><a href='{!! url("create_bank") !!}'>Create Banks</a></li>
-                            <li><a href='{!! url("banks") !!}'>View Banks</a></li>
-                            <li><a href='{!! url("create_fees") !!}'>Create Fees</a></li>
-                            <li><a href='{!! url("upload_fees") !!}'>Upload New Fees</a></li>
-                            <li><a href='{!! url("view_fees") !!}'>View Fees</a></li>
-                                              
-                             @elseif( @Auth::user()->department=='Finance')
-                            
-                            <li><a href='{!! url("pay_fees") !!}'>Pay Fees</a></li>
-                            <li><a href='{!! url("view_payments") !!}'>Transactions Ledger</a></li>
-                            <li><a href='{!! url("view_payments_master") !!}'>Master Fee Payment Report</a></li>
-
-                            <li><a href='{!! url("pay_transcript") !!}'>Pay Transcript</a></li>
-                            <li><a href='{!! url("pay_fees_penalty") !!}'>Late Registration payment</a></li>
-                            
-                            
-                                @elseif( @Auth::user()->department=='HR' || @Auth::user()->department=='top')
-                            
-                             <li><a href='{!! url("/add_staff") !!}'>Add Staff</a></li>
-                            <li><a href='{!! url("/getStaffCSV") !!}'>Upload Staff Data</a></li>
-                            <li><a href='{!! url("staff") !!}'>View Staff</a></li>
-                            <li><a href='{!! url("/directory") !!}'>Staff Directory</a></li>
-                              @elseif( @Auth::user()->department=='LA' || @Auth::user()->department=='top')
-                            
-                            <li><a href='{!! url("fee_summary") !!}'>View Attachment Data</a></li>
-
-                            <li><a href='{!! url("fee_summary") !!}'>Attachment Reports</a></li>
-                            <li><a href='{!! url("fee_summary") !!}'>Close or open online system</a></li>
-
-                            @elseif( @Auth::user()->role=='Admin')
-                            
-                            
-                            <li><a href='{!! url("/users") !!}'>View Users</a></li>
-
-                             <li><a href='{!! url("/search_account") !!}'>Search student password</a></li>
-                            <li><a href='{!! url("/synchronizations") !!}'>System Synchronizations</a></li>
-
-                            
-                            @endif
+                          
                              <li><a href='{!! url("/logout") !!}'>Logout</a></li>
                        
                              

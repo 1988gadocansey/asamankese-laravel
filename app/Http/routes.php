@@ -71,6 +71,11 @@ Route::group(['middleware' => ['web']], function () {
         return view('clone');
     });
 
+    // domentories
+     Route::match(array("get", "post"), '/domentories','DomentoriesController@process');
+     
+    Route::get('/domService', 'DomentoriesController@listDoms');
+    
     Route::controller('/banks', 'BankController', [
         'anyData' => 'banks.data',
         'getIndex' => 'banks',
