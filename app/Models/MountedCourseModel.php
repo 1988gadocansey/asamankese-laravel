@@ -15,19 +15,19 @@ class MountedCourseModel extends Model
      *
      * @var string
      */
-    protected $table = 'tpoly_mounted_courses';
-     protected static $logAttributes = ['COURSE', 'COURSE_LEVEL','COURSE_CREDIT','PROGRAMME'];
-    protected $primaryKey="ID";
-    protected $guarded = ['ID'];
+    protected $table = 'subjectallocations';
+     protected static $logAttributes = ['teacherId', 'subject','term','year'];
+    protected $primaryKey="id";
+    protected $guarded = ['id'];
     public $timestamps = false;
     public function course(){
-        return $this->belongsTo('App\Models\CourseModel', "COURSE","ID");
+        return $this->belongsTo('App\Models\CourseModel', "subject","code");
     }
     public function courses(){
-        return $this->hasMany('App\Models\CourseModel', "ID","COURSE");
+        return $this->hasMany('App\Models\CourseModel', "code","subject");
     }
-     public function lecturer(){
-        return $this->belongsTo('App\Models\WorkerModel', "LECTURER","id");
+     public function teacher(){
+        return $this->belongsTo('App\Models\WorkerModel', "teacherId","staffID");
     }
     /**
      * Get the user that owns the course.

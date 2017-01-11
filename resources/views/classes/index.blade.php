@@ -31,12 +31,12 @@
   </div>
 @endif
   </div>
-  
+  <h5 class="heading_b">Classes</h5>
  <div style="">
-     <div class="uk-margin-bottom" style="margin-left:700px" >
+     <div class="uk-margin-bottom" style="margin-left:880px" >
            
-         <a href="{{url('/upload/courses')}}" class="md-btn md-btn-small md-btn-primary uk-margin-right" >Upload Course from Excel</a>
-       
+            <i  href="#new_task" data-uk-modal="{ center:true }"   class="material-icons md-36 uk-text-primary"  title='assign teachers to courses' >supervisor_account</i>
+          
          <a href="#" class="md-btn md-btn-small md-btn-success uk-margin-right" id="printTable">Print Table</a>
         <!--  <a href="#" class="md-btn md-btn-small md-btn-success uk-margin-right" id="">Import from Excel</a>
          -->
@@ -70,8 +70,9 @@
                            
                             
                                                    
-                                  <i title="click to print" onclick="javascript:printDiv('print')" class="material-icons md-36 uk-text-success"   >print</i>
-                   
+                                  <i  title="click to print" onclick="javascript:printDiv('print')" class="material-icons md-36 uk-text-success"   >print</i>
+                                  <a href="{{url('/classes')}}" ><i   title="refresh this page" class="uk-icon-refresh uk-icon-medium "></i></a>
+                          
                             
                            
      </div>
@@ -79,33 +80,35 @@
  <div class="uk-modal" id="new_task">
     <div class="uk-modal-dialog">
         <div class="uk-modal-header">
-            <h4 class="uk-modal-title">Create Course</h4>
+            <h4 class="uk-modal-title">Create Class</h4>
         </div>
                  <form  action=""  id="formn" accept-charset="utf-8" method="POST" name="applicationFormn"  v-form>
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}"> 
-                  <div class="uk-grid">
-                                    <div class="uk-width-small-1-2 parsley-row">
-                                          <label>Program<span class="req uk-text-danger">*</span></label>
-                                <p></p>
-                                        {!! Form::select('program', 
-                                (['' => 'select program'] +$program ), 
-                                  old("program",""),
-                                    ['class' => 'md-input ddd','style'=>'width:400px','v-model'=>'program', 'required'=>'','v-form-ctrl'=>'','v-select'=>''] )  !!}
-                                    
-                                    </div>
-                                </div>
+                  
               <div class="uk-grid">
                                     <div class="uk-width-small-1-2 parsley-row">
-                                        <label for="wizard_fullname">Course Name<span class="req uk-text-danger">*</span></label>
+                                        <label for="wizard_fullname">Class<span class="req uk-text-danger">*</span></label>
                                         <input type="text" name="name" v-model='name' v-form-ctrl='' required class="md-input" />
                                      
                                     </div>
                                      <div class="parsley-row">
                                         <div class="uk-input-group">
                                             
-                                            <label for="wizard_phone">Course Code<span class="req uk-text-danger">*</span></label>
-                                            <input type="text" class="md-input" v-model='code' v-form-ctrl="" name="code" id="code" required=""/>
-                                             
+                                            <label for="wizard_phone">Next Class<span class="req uk-text-danger">*</span></label>
+                                             {!! Form::select('next', 
+                                (['' => 'select next class'] +$class ), 
+                                  old("class",""),
+                                    ['class' => 'md-input label-fixed','id'=>"parent",'required'=>''] )  !!}  
+                                        </div>
+                                    </div>
+                   <div class="parsley-row">
+                                        <div class="uk-input-group">
+                                            
+                                            <label for="wizard_phone">Teacher<span class="req uk-text-danger">*</span></label>
+                                             {!! Form::select('teacher', 
+                                (['' => 'Select Class teacher'] +$teacher ), 
+                                  old("teacher",""),
+                                    ['class' => 'md-input label-fixed ','id'=>"",'required'=>''] )  !!}  
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +117,7 @@
                  
 
             <div class="uk-modal-footer uk-text-right">
-               <input type="submit" value="Save" id='save'v-show="applicationFormn.$valid"  class="md-btn   md-btn-success uk-margin-small-top">
+               <input type="submit" value="Save" id='save'  class="md-btn   md-btn-success uk-margin-small-top">
        <button type="button" class="md-btn md-btn-flat uk-modal-close md-btn-wave">Close</button>
             </div>
         </form>
@@ -128,28 +131,20 @@
                    {!!  csrf_field()  !!}
                     <div class="uk-grid" data-uk-grid-margin="">
 
-                        <div class="uk-width-medium-1-5">
+                       <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
-                                    {!! Form::select('program', 
-                                (['' => 'All programs'] +$program ), 
-                                  old("program",""),
-                                    ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select program'] )  !!}
+                                    {!! Form::select('teacher', 
+                                (['' => 'All Teachers'] +$teacher ), 
+                                  old("teacher",""),
+                                    ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select teacher'] )  !!}
                          </div>
                         </div>
                         
-                       
-                         <div class="uk-width-medium-1-5">
-                            <div class="uk-margin-small-top">
-                                
-                                {!!  Form::select('by', array('code'=>'Course Code','name'=>'Course Name' ), null, ['placeholder' => 'select criteria','class'=>'md-input'],old("by","")); !!}
-                          
-                            </div>
-                        </div>
 
                         
                          <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">                            
-                                <input type="text" style=" "   name="search"  class="md-input" placeholder="search by course name or course code">
+                                <input type="text" style=" "   name="search"  class="md-input" placeholder="type class name here">
                             </div>
                         </div>
                          
@@ -170,7 +165,7 @@
         </div>
     </div>
  </div>
- <h5>Courses</h5>
+ <p>&nbsp;</p>
  <div class="uk-width-xLarge-1-1">
     <div class="md-card">
         <div class="md-card-content">
@@ -180,10 +175,12 @@
                <thead>
                  <tr>
                      <th class="filter-false remove sorter-false"  >NO</th>
-                      <th>COURSE</th>
-                     <th  style="text-align: ">CODE</th>
-                     <th>PROGRAMME</th> 
-                    
+                      <th>CLASS</th>
+                     <th  style="text-align: ">CLASS TEACHER</th>
+                     <th>NEXT CLASS</th>
+                      
+                     <th>ACADEMIC YEAR</th>
+                     <th>TERM</th>
                       <th  class="filter-false remove sorter-false uk-text-center" colspan="2" data-priority="1">ACTION</th>   
                                      
                 </tr>
@@ -196,16 +193,18 @@
                                         <tr align="">
                                             <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
                                             <td> {{ strtoupper(@$row->name) }}</td>
-                                            <td> {{ strtoupper(@$row->code)	 }}</td>
-                                            <td> {{strtoupper( @$row->programme->name)	 }}</td>
-                                               
+                                            
+                                            <td> {{ strtoupper(@$row->teacher->fullName)	 }}</td>
+                                            <td> {{strtoupper( @$row->nextClass)	 }}</td>
+                                            <td> {{ @$row->year	 }}</td>
+                                            <td> {{ @$row->term	 }}</td>
                                             <td class="uk-text-center"> 
                                                 
-                                            <a href='{{url("edit_course/$row->id/id")}}' ><i title='Click to edit course' class="md-icon material-icons">edit</i></a> 
+                                            <a href='{{url("classes/$row->id/edit")}}' ><i title='Click to edit course' class="md-icon material-icons">edit</i></a> 
                                               
-                                             {!!Form::open(['action' =>['CourseController@destroy', 'id'=>$row->id], 'method' => 'DELETE','name'=>'c' ,'style' => 'display: inline;'])  !!}
+                                             {!!Form::open(['action' =>['ClassController@destroy', 'id'=>$row->name], 'method' => 'DELETE','name'=>'c' ,'style' => 'display: inline;'])  !!}
 
-                                                      <button type="submit" onclick="return confirm('Are you sure you want to delete   {{$row->name . $row->classId}} -  {{ @$row->programme->name	 }}?')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
+                                                      <button type="submit" onclick="return confirm('Are you sure you want to delete   {{$row->name 	 }}?')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
                                                         
                                                      {!! Form::close() !!}
                                             </td>

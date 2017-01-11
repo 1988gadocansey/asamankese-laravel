@@ -24,6 +24,13 @@ class SystemController extends Controller
 
         
     }
+     public function getProgramList2() {
+         $program= Models\ProgrammeModel::
+                select('code', "name")->orderBy("name")->get();
+         return $program;
+       
+         
+    }
     public function age($birthdate, $pattern = 'eu')
         {
             $patterns = array(
@@ -117,6 +124,15 @@ class SystemController extends Controller
          
     }
     public function getHouseList() {
+         
+         
+         $school = \DB::table('house')->orderBy("house")
+                ->lists('house', 'house');
+         return $school;
+       
+         
+    }
+    public function getClasssList() {
          
          
          $school = \DB::table('house')->orderBy("house")
@@ -450,6 +466,15 @@ if(@\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='HOD' ||@\Auth::use
                  
                 ->lists('fullName', 'staffID');
          return $lecturer;
+       
+         
+    }
+     public function getClassSelectBoxEdit() {
+        
+         $class = \DB::table('classes')->select("name")->orderby("Name")
+                 
+                ->lists('name', 'name');
+         return $class;
        
          
     }

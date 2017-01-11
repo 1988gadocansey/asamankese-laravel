@@ -176,10 +176,19 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/house/{id}/edit','HouseController@update');
     
     //Academic Modules
-    
+     /************** course management ****************************/
     Route::get('/courses','CourseController@index');
-    Route::get('/create_course','CourseController@create');
-    Route::post('/create_course','CourseController@store');
+    Route::post('/courses','CourseController@store');
+    Route::get('/edit_course/{id}/id','CourseController@edit');
+   
+    Route::post('/edit_course/{id}/id','CourseController@update');
+    
+    /************** Class management ****************************/
+    Route::match(array("get", "post"), '/classes', "ClassController@index");
+    Route::get('/classes/{id}/edit','ClassController@edit');
+   
+    Route::delete('/delete_class', 'ClassController@destroy');
+    
     Route::get('/mount_course','CourseController@mountCourse');
     Route::post('/mount_course','CourseController@mountCourseStore');
     Route::get('/mounted_view','CourseController@viewMounted');
@@ -195,6 +204,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::match(array("get", "post"), '/upload/courses', "CourseController@uploadCourse");
     Route::get('/courseDownloadExcel/{type}', 'CourseController@courseDownloadExcel');
     Route::get('/marksDownloadExcel/{code}/code', 'CourseController@marksDownloadExcel');
+    Route::match(array("get", "post"), '/teachers/subject/allocation', "CourseController@subjectAllocator");
     Route::match(array("get", "post"), '/upload/mounted', "CourseController@uploadMounted");
     Route::match(array("get", "post"), '/upload/legacy', "CourseController@uploadLegacy");
     Route::match(array("get", "post"), '/mounted/{id}/edit', "CourseController@updateMounted");

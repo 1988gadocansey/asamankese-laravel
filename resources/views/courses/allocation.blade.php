@@ -34,7 +34,8 @@
   
  <div style="">
      <div class="uk-margin-bottom" style="margin-left:700px" >
-           
+              <i  href="#new_task" data-uk-modal="{ center:true }"   class="material-icons md-36 uk-text-primary"  title='assign teachers to courses' >supervisor_account</i>
+          
          <a href="{{url('/upload/courses')}}" class="md-btn md-btn-small md-btn-primary uk-margin-right" >Upload Course from Excel</a>
        
          <a href="#" class="md-btn md-btn-small md-btn-success uk-margin-right" id="printTable">Print Table</a>
@@ -79,7 +80,7 @@
  <div class="uk-modal" id="new_task">
     <div class="uk-modal-dialog">
         <div class="uk-modal-header">
-            <h4 class="uk-modal-title">Create Course</h4>
+            <h4 class="uk-modal-title">Allocate Subjects to Teachers</h4>
         </div>
                  <form  action=""  id="formn" accept-charset="utf-8" method="POST" name="applicationFormn"  v-form>
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}"> 
@@ -136,7 +137,16 @@
                                     ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select program'] )  !!}
                          </div>
                         </div>
-                        
+                        <div class="uk-width-medium-1-5">
+                            <div class="uk-margin-small-top">
+                                  
+                                    {!! Form::select('level', 
+                                (['' => 'All classes'] +$class ), 
+                                  old("class",""),
+                                    ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select class'] )  !!}
+                      
+                            </div>
+                        </div>
                        
                          <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
@@ -181,10 +191,13 @@
                  <tr>
                      <th class="filter-false remove sorter-false"  >NO</th>
                       <th>COURSE</th>
-                     <th  style="text-align: ">CODE</th>
+                     <th  style="text-align:center">CODE</th>
                      <th>PROGRAMME</th> 
-                    
-                      <th  class="filter-false remove sorter-false uk-text-center" colspan="2" data-priority="1">ACTION</th>   
+                     <th>CLASS</th> 
+                     <th style="text-align:">TEACHER</th>
+                     <th style="text-align: ">ACADEMIC YEAR</th>
+                      <th style="text-align:center">TERM</th>
+                     <th  class="filter-false remove sorter-false uk-text-center" colspan="2" data-priority="1">ACTION</th>   
                                      
                 </tr>
              </thead>
@@ -195,10 +208,14 @@
                                          
                                         <tr align="">
                                             <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
-                                            <td> {{ strtoupper(@$row->name) }}</td>
-                                            <td> {{ strtoupper(@$row->code)	 }}</td>
-                                            <td> {{strtoupper( @$row->programme->name)	 }}</td>
-                                               
+                                            <td> {{ strtoupper(@$row->course->name) }}</td>
+                                            <td> {{ strtoupper(@$row->course->code)	 }}</td>
+                                            <td> {{strtoupper( @$row->course->programme->name)	 }}</td>
+                                            <td> {{ strtoupper(@$row->classId)	 }}</td>
+                                            <td class=""> {{ strtoupper(@$row->teacher->fullName) }}</td>
+                                            <td class=""> {{ @$row->year }}</td>
+                                            <td class="uk-text-center"> {{ @$row->term }}</td>
+                                            
                                             <td class="uk-text-center"> 
                                                 
                                             <a href='{{url("edit_course/$row->id/id")}}' ><i title='Click to edit course' class="md-icon material-icons">edit</i></a> 

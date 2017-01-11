@@ -248,39 +248,35 @@ class CourseController extends Controller
                         
                        if(!empty($data) && $data->count()){
  
-                            $user = \Auth::user()->id;
+                            $user = \Auth::user()->fund;
                                foreach($data as $value=>$row)
                                {
-                                   $code=$row->course_code;
-                                   $program=$row->programme;
-                                   $credit=$row->course_credit;
-                                   $name=  strtoupper($row->course_name);
-                                   $year=$row->course_level;
-                                   $semester=$row->course_semester;
-                                     
-                                   $programme = $sys->programmeSearchByCode(); // check if the programmes in the file tally wat is in the db
+                                   $code=$row->code;
+                                   $program=$row->pcode;
+                                   
+                                 
+                                   $name=$row->name;
+                                    $programme = $sys->programmeSearchByCode(); // check if the programmes in the file tally wat is in the db
                            if (in_array($program, $programme)) {
    
-                       $testQuery=Models\CourseModel::where('COURSE_CODE', $code)->first();
+                       $testQuery=Models\CourseModel::where('code', $code)->first();
                       
                          if(empty($testQuery)){
                              
                          
                                $course = new Models\CourseModel();
-                                           $course->COURSE_CODE = $code;
-                                           $course->COURSE_NAME = $name;
-                                           $course->COURSE_CREDIT = $credit;
-                                           $course->PROGRAMME = $program;
-                                           $course->COURSE_SEMESTER = $semester;
-                                           $course->COURSE_LEVEL = $year;
-
-                                           $course->USER = $user;
+                                           $course->code = $code;
+                                           $course->name = $name;
+                                          
+                                           $course->pcode = $pcode;
+                                           
+                                           $course->createdBy = $user;
                                            $course->save();
                                            \DB::commit();
                                        }
                          else{
                                
-       Models\CourseModel::where('COURSE_CODE', $code)->update(array("COURSE_LEVEL" =>@$year, "COURSE_SEMESTER" => $semester, "PROGRAMME" => $program,  "COURSE_CREDIT" =>$credit,"COURSE_NAME"=>$name,"USER"=>$user ));
+      @Models\CourseModel::where('code', $code)->update(array("name" =>@$name, "code" => $code, "pcode" => $program ));
                                        \DB::commit();
                          }
                                }
@@ -581,7 +577,41 @@ class CourseController extends Controller
 </div></div>
         
    <?php }
-   
+    public function subjectAllocator(Request $request,SystemController $sys)
+    {
+          if($request->user()->isSupperAdmin  ||     @\Auth::user()->department=="top"){
+       
+          $courses= Models\MountedCourseModel::query() ;
+          }
+          elseif(@\Auth::user()->role=="HOD" || @\Auth::user()->role=="Lecturer" || @\Auth::user()->role=="Registrar") {
+            $courses = Models\CourseModel::where('pcode', '!=', '')->whereHas('programs', function($q) {
+            $q->whereHas('departments', function($q) {
+                $q->whereIn('deptCode', array(@\Auth::user()->department));
+            });
+        }) ;
+        }
+        
+         if ($request->has('search') && trim($request->input('search')) != "") {
+            // dd($request);
+            $courses->where($request->input('by'), "LIKE", "%" . $request->input("search", "") . "%");
+        }
+        if ($request->has('program') && trim($request->input('program')) != "") {
+            $courses->where("pcode", $request->input("program", ""));
+        }
+        if ($request->has('level') && trim($request->input('level')) != "") {
+            $courses->where("classId", $request->input("level", ""));
+        }
+        
+        
+        $data = $courses->orderBy("subject")->paginate(100);
+        
+        $request->flashExcept("_token");
+          
+         
+        return view('courses.allocation')->with("data", $data)->with("class",$sys->getClassList())
+                        ->with('program', $sys->getProgramList());
+                 
+    }
     /**
      * Display a list of all of the user's task.
      *
@@ -594,10 +624,10 @@ class CourseController extends Controller
        
           $courses= Models\CourseModel::query() ;
           }
-          elseif(@\Auth::user()->role=="HOD" || @\Auth::user()->role=="Support" || @\Auth::user()->role=="Registrar") {
-            $courses = Models\CourseModel::where('PROGRAMME', '!=', '')->whereHas('programs', function($q) {
+          elseif(@\Auth::user()->role=="HOD" || @\Auth::user()->role=="Lecturer" || @\Auth::user()->role=="Registrar") {
+            $courses = Models\CourseModel::where('pcode', '!=', '')->whereHas('programs', function($q) {
             $q->whereHas('departments', function($q) {
-                $q->whereIn('DEPTCODE', array(@\Auth::user()->department));
+                $q->whereIn('deptCode', array(@\Auth::user()->department));
             });
         }) ;
         }
@@ -607,22 +637,19 @@ class CourseController extends Controller
             $courses->where($request->input('by'), "LIKE", "%" . $request->input("search", "") . "%");
         }
         if ($request->has('program') && trim($request->input('program')) != "") {
-            $courses->where("PROGRAMME", $request->input("program", ""));
+            $courses->where("pcode", $request->input("program", ""));
         }
         if ($request->has('level') && trim($request->input('level')) != "") {
-            $courses->where("COURSE_LEVEL", $request->input("level", ""));
+            $courses->where("classId", $request->input("level", ""));
         }
-        if ($request->has('semester') && trim($request->input('semester')) != "") {
-            $courses->where("COURSE_SEMESTER", "=", $request->input("semester", ""));
-        }
-         
         
-        $data = $courses->groupBy('COURSE_NAME')->paginate(100);
+        
+        $data = $courses->orderBy("name")->paginate(100);
         
         $request->flashExcept("_token");
           
          
-        return view('courses.index')->with("data", $data)
+        return view('courses.index')->with("data", $data)->with("class",$sys->getClassList())
                         ->with('program', $sys->getProgramList());
                  
     }
@@ -771,12 +798,12 @@ class CourseController extends Controller
     }
     
     public function create(SystemController $sys) {
-       if(@\Auth::user()->role=='HOD' || @\Auth::user()->role=='Support'){
+       if(@\Auth::user()->role=='Admin' || @\Auth::user()->department=='top'){
         $programme=$sys->getProgramList();
          return view('courses.create')->with('programme', $programme);
        }
        else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
+            return redirect("/dashboard");
         }
     }
     public function show(Request $request) {
@@ -790,43 +817,35 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->role=='Support'){
+        if(@\Auth::user()->department=='top' || @\Auth::user()->role=='Admin'){
         \DB::beginTransaction();
         try {
             $this->validate($request, [
                 'name' => 'required',
                 'program' => 'required',
                 'code' => 'required',
-                'level' => 'required',
-                'credit' => 'required',
-                'semester' => 'required'
+                 
             ]);
 
-            $user=@\Auth::user()->id;
+            $user=@\Auth::user()->fund;
 
             $name = strtoupper($request->input('name'));
             $program = strtoupper($request->input('program'));
-            $level =strtoupper( $request->input('level'));
-            $semester =strtoupper( $request->input('semester'));
-            $credit = strtoupper($request->input('credit'));
             $code = strtoupper($request->input('code'));
 
             $course = new Models\CourseModel();
-            $course->COURSE_NAME = $name;
-            $course->COURSE_CREDIT = $credit;
-            $course->PROGRAMME = $program;
-            $course->COURSE_SEMESTER = $semester;
-            $course->COURSE_CODE = $code;
-            $course->COURSE_LEVEL = $level;
-            $course->USER = $user;
-
+            $course->name = $name;
+            $course->pcode= $program;
+            $course->code = $code;
+            $course->createdBy= $user;
+             
 
             if ($course->save()) {
                  \DB::commit();
-                return redirect("/courses")->with("success", "Following Courses:<span style='font-weight:bold;font-size:13px;'> $name added </span>successfully added! ");
+                return redirect("/courses")->with("success", "<span style='font-weight:bold;font-size:13px;'> $name added successfully</span> ");
             } else {
 
-                return redirect("/courses")->withErrors("Following Courses N<u>o</u> :<span style='font-weight:bold;font-size:13px;'> $name could not be added </span>could not be added!");
+                return redirect("/courses")->with("<span style='font-weight:bold;font-size:13px;'> $name could not be added </span>!");
             }
         } catch (\Exception $e) {
             \DB::rollback();
@@ -1496,20 +1515,31 @@ class CourseController extends Controller
     // show form for edit resource
     public function edit(Request $request,$id,SystemController $sys){
         if (@\Auth::user()->department == 'top' || @\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support') {
-            if ($request->isMethod("get")) {
+           
 
-                $course = Models\CourseModel::where("ID", $id)->firstOrFail();
+                $course = Models\CourseModel::where("id", $id)->firstOrFail();
                 $program = $sys->getProgramList2();
                 return view('courses.edit')
                                 ->with("program", $program)
-                                ->with('data', $course);
-            } else {
+                                ->with('data', $course)
+                                  ;
+        }
+        else{
+            // throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
+
+            return redirect("/dashboard");
+        }
+    }
+
+    public function update(Request $request, $id){
+        
                 $this->validate($request, [
 
 
                     'program' => 'required',
                     'name' => 'required',
                     'code' => 'required',
+                    
                 ]);
                   $name=$request->input("name");
                     $code=$request->input("code");
@@ -1518,10 +1548,10 @@ class CourseController extends Controller
                 \DB::beginTransaction();
                 try {
                    
-                    $query = @Models\CourseModel::where("ID", $id)->update(array("COURSE_NAME" => $name, "COURSE_CODE" => $code, "PROGRAMME" => $program));
+                    $query = @Models\CourseModel::where("id", $id)->update(array("name" => $name, "code" => $code, "pcode" => $program));
                     \DB::commit();
                     if($query){
-                        @Models\MountedCourseModel::where("COURSE",$id)->update(array("COURSE_CODE"=>$code,"PROGRAMME"=>$program));
+                       // @Models\MountedCourseModel::where("COURSE",$id)->update(array("COURSE_CODE"=>$code,"PROGRAMME"=>$program));
                         \DB::commit();
                         return redirect('/courses')->with("success",  " <span style='font-weight:bold;font-size:13px;'> $name updated successfully</span> ");
                       
@@ -1530,15 +1560,8 @@ class CourseController extends Controller
                 } catch (\Exception $e) {
                     \DB::rollback();
                 }
-            }
-        } else {
-            // throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-
-            return redirect("/dashboard");
-        }
-    }
-
-    public function update(Request $request, $id){
+           
+        
         
     }
     /**
@@ -1548,24 +1571,24 @@ class CourseController extends Controller
      * @param  Task  $task
      * @return Response
      */
-    public function destroy(Request $request,   SystemController $sys, Models\CourseModel $course)
+    public function destroy(Request $request,   SystemController $sys)
     {
         //dd($request->input("id"));
-       if(@\Auth::user()->role=='HOD' ||  @\Auth::user()->role=='Support'){
-           $hod=@\Auth::user()->id;
-        $array=$sys->getSemYear();
-        $sem=$array[0]->SEMESTER;
-        $year=$array[0]->YEAR;
-          
-       
-         $query= Models\MountedCourseModel::where('COURSE',$request->input("id"))
-                ->where('COURSE_YEAR',$year)
-                ->where('COURSE_SEMESTER',$sem)
-                ->first();
-         
-        if($query==""){
-            
-            $query1= Models\CourseModel::where('ID',$request->input("id"))->where("USER",$hod)->delete();
+       if(@\Auth::user()->role=='Admin' ||  @\Auth::user()->department=='top'){
+           $hod=@\Auth::user()->fund;
+            $array=$sys->getSemYear();
+            $sem=$array[0]->term;
+            $year=$array[0]->year;
+
+//       
+//         $query= Models\MountedCourseModel::where('COURSE',$request->input("id"))
+//                ->where('COURSE_YEAR',$year)
+//                ->where('COURSE_SEMESTER',$sem)
+//                ->first();
+//         
+//        if($query==""){
+//            
+            $query1= Models\CourseModel::where('id',$request->input("id"))->where("createdBy",$hod)->delete();
              
           
             
@@ -1582,53 +1605,24 @@ class CourseController extends Controller
              }
             
           } 
-          else{
-                return redirect("/courses")->with("error","<span style='font-weight:bold;font-size:13px;'>Whoops!! you cannot delete a mounted course</span> ");
+//          else{
+//                return redirect("/courses")->with("error","<span style='font-weight:bold;font-size:13px;'>Whoops!! you cannot delete a mounted course</span> ");
+//           
+//          }
            
-          }
-           
-       }
+        
        else {
-            abort(434, "{!!<b>Unauthorize Access detected</b>!!}");
+           // abort(434, "{!!<b>Unauthorize Access detected</b>!!}");
             redirect("/dashboard");
         }
          
     }
-    // delete mounted courses
-    public function destroy_mounted(Request $request,   SystemController $sys, Models\CourseModel $course)
-    {
-       if(@\Auth::user()->role=='HOD'){
-        $array=$sys->getSemYear();
-        $sem=$array[0]->SEMESTER;
-        $year=$array[0]->YEAR;
-          
-        \DB::beginTransaction();
-          try {
-          
-            
-             Models\MountedCourseModel::where('ID',$request->input("id"))->delete();
-             
-          
-             \DB::commit();
-               return redirect("/mounted_view")->with("success","<span style='font-weight:bold;font-size:13px;'> Course  successfully deleted!</span> ");
-   
-          
-          }catch (\Exception $e) {
-                \DB::rollback();
-          } 
-       }
-       else {
-            abort(434, "{!!<b>Unauthorize Access detected</b>!!}");
-            redirect("/dashboard");
-        }
-         
-    }
-    public function courseDownloadExcel($type)
+       public function courseDownloadExcel($type)
 
 	{
 
          
-		$data = Models\CourseModel::select('COURSE_CODE','COURSE_NAME','COURSE_LEVEL','COURSE_CREDIT','COURSE_SEMESTER','PROGRAMME')->take(5)->get()->toArray();
+		$data = Models\CourseModel::select('name','code','pcode')->take(5)->get()->toArray();
 
 		return Excel::create('courses_example', function($excel) use ($data) {
 

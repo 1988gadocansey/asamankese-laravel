@@ -15,16 +15,17 @@ class CourseModel extends Model
      *
      * @var string
      */
-    protected $table = 'tpoly_courses';
-     protected static $logAttributes = ['COURSE_NAME', 'COURSE_CODE','PROGRAMME','COURSE_LEVEL'];
-    protected $primaryKey="ID";
-    protected $guarded = ['ID','COURSE_CODE'];
+    protected $table = 'courses';
+     protected static $logAttributes = ['name', 'class','code','user'];
+    protected $primaryKey="id";
+    protected $guarded = ['id'];
     public $timestamps = false;
     public function programme(){
-        return $this->belongsTo('App\Models\ProgrammeModel', "PROGRAMME","PROGRAMMECODE");
+        return $this->belongsTo('App\Models\ProgrammeModel', "pcode","code");
     }
+   
      public function programs(){
-        return $this->hasMany('App\Models\ProgrammeModel', "PROGRAMMECODE","PROGRAMME");
+        return $this->hasMany('App\Models\ProgrammeModel', "code","pcode");
     }
      
 }

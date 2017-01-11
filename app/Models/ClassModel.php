@@ -13,10 +13,13 @@ class ClassModel extends Model
      *
      * @var string
      */
-    protected $table = 'tpoly_classes';
+    protected $table = 'classes';
     
     protected $primaryKey="id";
     protected $guarded = ['id'];
     
    public $timestamps = false;
+    public function teacher(){
+        return $this->belongsTo('App\Models\WorkerModel', "teacherId","staffID");
+    }
 }
