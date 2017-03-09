@@ -136,7 +136,7 @@
                                     {!! Form::select('teacher', 
                                 (['' => 'All Teachers'] +$teacher ), 
                                   old("teacher",""),
-                                    ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select teacher'] )  !!}
+                                    ['class' => 'md-input parent select','id'=>"parent",'placeholder'=>'select teacher'] )  !!}
                          </div>
                         </div>
                         
@@ -239,7 +239,11 @@ $(".parent").on('change',function(e){
 });
 
 </script>
- 
+ <script src="{!! url('public/assets/js/select2.full.min.js') !!}"></script>
+<script>
+                    $(document).ready(function () {
+            $('.select').select2({width: "resolve"});
+            });</script>
  <!--  notifications functions -->
     <script src="public/assets/js/components_notifications.min.js"></script>
     <script>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 
-class MountedCourseModel extends Model
+class CourseAllocationModel extends Model
 {
     use LogsActivity;
     //

@@ -241,9 +241,10 @@
                     <div class="uk-dropdown uk-dropdown-scrollable">
                         <ul class="uk-nav uk-nav-dropdown">
                             @if( @Auth::user()->role=='Lecturer')
-                            <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
-                           <li><a href='{!! url("/upload/marks") !!}'>Upload Marks from Excel </a></li>
-                            <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
+                            <li><a href='{!! url("/registered_courses") !!}'>My Class Lists</a></li>
+                           
+                            <li><a href='{!! url("/upload/marks") !!}'>Upload Marks from Excel </a></li>
+                             
                               <li><a href='{!! url("/broadsheet/noticeboard") !!}'>Print Broadsheet</a></li>
                             
                           @elseif( @Auth::user()->role=='Admin' || @Auth::user()->department=='top' || @Auth::user()->role=='HOD')
@@ -252,13 +253,14 @@
 <!--                            <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>-->
                             <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
                             <li><a href='{!! url("/upload/courses") !!}'>Upload Bulk Courses</a></li>
-                            <li><a href='{!! url("/teachers/subject/allocation") !!}'>Teacher - Subject Allocations</a></li>
+                            <li><a href='{!! url("/teachers/subject/create") !!}'>Create Subject Allocations</a></li>
                           
-                            <li><a href='{!! url("/registered_courses") !!}'>Enter Marks</a></li>
+                            <li><a href='{!! url("/teachers/subject/allocation") !!}'>View Subject Allocations</a></li>
+                          
+                            <li><a href='{!! url("/registered_courses") !!}'>Class Lists</a></li>
                               <li><a href='{!! url("/upload/marks") !!}'>Upload Marks from Excel </a></li>
                          
-                              <li><a href='{!! url("/upload/legacy") !!}'>Upload Old Results</a></li>
-                            
+                             
                             <li><a href='{!! url("/mount_course") !!}'>Mount Courses for term</a></li>
                            
                             <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>

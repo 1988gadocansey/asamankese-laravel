@@ -25,8 +25,8 @@ class SystemController extends Controller
         
     }
      public function getProgramList2() {
-         $program= Models\ProgrammeModel::
-                select('code', "name")->orderBy("name")->get();
+         $program= Models\ProgrammeModel::orderBy("name")->
+                lists('name', "code");
          return $program;
        
          
@@ -434,9 +434,8 @@ if(@\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='HOD' ||@\Auth::use
 
     // this is purposely for select box 
     public function getCourseList() {
-         $course = Models\CourseModel::
-                select('COURSE_NAME', 'ID',"PROGRAMME","COURSE_SEMESTER","COURSE_LEVEL","COURSE_CODE")->orderBy("COURSE_NAME")->get();
-         return $course;
+         $course = Models\CourseModel::orderBy("name")->lists("name","code");
+                return $course;
        
          
     }
@@ -454,15 +453,24 @@ if(@\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='HOD' ||@\Auth::use
     public function getLectureList() {
         
          $lecturer = \DB::table('workers')->where('designation','Teacher')
-                 ->where('department',$user_department)->orderby("Name")
+                  ->orderby("Name")
                 ->lists('fullName', 'staffID');
+         return $lecturer;
+       
+         
+    }
+     public function getLectureListAllocation() {
+        
+         $lecturer = \DB::table('workers')->select('fullName', 'staffID')->where('designation','Teacher')
+                  ->orderby("Name")->get();
+                
          return $lecturer;
        
          
     }
      public function getLectureList_All() {
         
-         $lecturer = \DB::table('workers')->select("fullName","staffID")->orderby("Name")
+         $lecturer = \DB::table('workers')->orderby("Name")
                  
                 ->lists('fullName', 'staffID');
          return $lecturer;
@@ -471,7 +479,7 @@ if(@\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='HOD' ||@\Auth::use
     }
      public function getClassSelectBoxEdit() {
         
-         $class = \DB::table('classes')->select("name")->orderby("Name")
+         $class = \DB::table('classes')->orderby("Name")
                  
                 ->lists('name', 'name');
          return $class;

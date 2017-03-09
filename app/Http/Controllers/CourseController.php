@@ -579,39 +579,125 @@ class CourseController extends Controller
    <?php }
     public function subjectAllocator(Request $request,SystemController $sys)
     {
+       
           if($request->user()->isSupperAdmin  ||     @\Auth::user()->department=="top"){
        
-          $courses= Models\MountedCourseModel::query() ;
+          $courses= Models\CourseAllocationModel::query() ;
+           
           }
-          elseif(@\Auth::user()->role=="HOD" || @\Auth::user()->role=="Lecturer" || @\Auth::user()->role=="Registrar") {
-            $courses = Models\CourseModel::where('pcode', '!=', '')->whereHas('programs', function($q) {
-            $q->whereHas('departments', function($q) {
-                $q->whereIn('deptCode', array(@\Auth::user()->department));
-            });
-        }) ;
+          else{
+            $courses= Models\CourseAllocationModel::query()->where("teacherId",@\Auth::user()->fund) ;
+            
+          }
+          
+        if ($request->has('class') && trim($request->input('class')) != "") {
+            $courses->where("classId", $request->input("class", ""));
+        }
+        if ($request->has('staff') && trim($request->input('staff')) != "") {
+            $courses->where("teacherId", $request->input("staff", ""));
+        }
+        if ($request->has('term') && trim($request->input('term')) != "") {
+            $courses->where("term", $request->input("term", ""));
+        }
+        if ($request->has('year') && trim($request->input('year')) != "") {
+            $courses->where("year", $request->input("year", ""));
         }
         
-         if ($request->has('search') && trim($request->input('search')) != "") {
-            // dd($request);
-            $courses->where($request->input('by'), "LIKE", "%" . $request->input("search", "") . "%");
-        }
-        if ($request->has('program') && trim($request->input('program')) != "") {
-            $courses->where("pcode", $request->input("program", ""));
-        }
-        if ($request->has('level') && trim($request->input('level')) != "") {
-            $courses->where("classId", $request->input("level", ""));
-        }
-        
-        
-        $data = $courses->orderBy("subject")->paginate(100);
+        $data = $courses->orderBy("classId")->paginate(100);
         
         $request->flashExcept("_token");
           
          
         return view('courses.allocation')->with("data", $data)->with("class",$sys->getClassList())
-                        ->with('program', $sys->getProgramList());
-                 
+                        ->with('year', $sys->years())->with('subject', $sys->getCourseList())->with('teacher', $sys->getLectureListAllocation())
+         ->with('staff', $sys->getLectureList());
+         
+       
     }
+    public function allocationCreator(Request $request,SystemController $sys){
+        if ($request->isMethod("get")) {
+             return view('courses.createAllocation')->with("class",$sys->getClassList())
+                        
+         ->with('staff', $sys->getLectureList())->with('subject', $sys->getCourseList());
+        
+        }
+        else{
+          
+        $this->validate($request, [
+
+
+                    'staff' => 'required',
+                    'subject' => 'required',
+                    'classs' => 'required',
+                    
+                ]);
+                  $array = $sys->getSemYear();
+                $sem = $array[0]->term;
+                $year = $array[0]->year;
+                    $staff=$request->input("staff");
+                    $class=$request->input("classs");
+                    $subject=$request->input("subject");
+                   // dd($program);
+                      $user=@\Auth::user()->fund;
+         
+                \DB::beginTransaction();
+                try {
+                   
+                        $allocator = new Models\CourseAllocationModel();
+                $allocator->subject = $subject;
+                $allocator->teacherId = $staff;
+                $allocator->classId = $class;
+                $allocator->year = $year;
+                $allocator->term = $sem;
+                $allocator->createdBy = $user;
+                \DB::commit();
+                  
+                       if( $allocator->save()){
+                            \DB::commit();
+                        return response()->json(['status'=>'success','message'=>' Subject allocated to staff successfully ']);
+      
+                       }
+                       else{
+                           return response()->json(['status'=>'error','message'=> ' Error allocating subject. try again ']);
+       
+                       }
+                    
+                } catch (\Exception $e) {
+                    \DB::rollback();
+                }
+        }
+    }
+    // updating course allocation
+     public function updateAllocation(Request $request,SystemController $sys){
+                    $upper = $request->input('upper');
+                    
+                    $teacher = $request->input('teacher');
+                   
+                   // $term = $request->input('term');
+                    $class = $request->input('classs');
+                    $key = $request->input('key');
+                   
+                    $array = $sys->getSemYear();
+                $term = $array[0]->term;
+                $year = $array[0]->year;
+                    
+                    for ($i = 0; $i < $upper; $i++) {
+                        $teacherArr = $teacher[$i];
+                        
+                       
+                        
+                        $keyArr = $key[$i];
+                        $classArr = $class[$i];
+                       
+                         Models\CourseAllocationModel::where("id", $keyArr)
+                                 ->update(array("teacherId" => $teacherArr,   "classId" => $classArr, "year" => $year, "term" => $term));
+
+                       
+                        
+                    }
+                         return response()->json(['status'=>'success','message'=>' Subject allocated to staff successfully ']);
+      
+     }
     /**
      * Display a list of all of the user's task.
      *
@@ -1215,182 +1301,7 @@ class CourseController extends Controller
      * Uploading old academic records here
      * file format Excel
      */
-    public function uploadLegacy(Request $request, SystemController $sys){
-        
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Support' || @\Auth::user()->role=='Registrar'){
-           if ($request->isMethod("get")) {
-             
-             $programme = $sys->getProgramList();
-                $course = $sys->getCourseList();
-
-                return view('courses.legacyGrades')->with('program', $programme)
-                                ->with('course', $course)->with('year', $sys->years());
-            }
-           else{
-               $this->validate($request, [
-            
-            'file' => 'required',
-            'course' => 'required',
-            'sem' => 'required',
-            'year' => 'required',
-            'credit' => 'required',
-            'program' => 'required',
-            'level' => 'required',
-        ]);
-                
-            
-
-            $valid_exts = array('csv', 'xls', 'xlsx'); // valid extensions
-            $file = $request->file('file');
-            $path = $request->file('file')->getRealPath();
-
-            $ext = strtolower($file->getClientOriginalExtension());
-            
-            $semester = $request->input('sem');
-            $year = $request->input('year');
-            $course =  $request->input('course') ;
-           $programme = $request->input('program');
-            $level = $request->input('level');
-            $credit=$request->input('credit');
-            //$studentIndexNo = $sys->getStudentIDfromIndexno($request->input('student'));
-                   
-             
-           if (in_array($ext, $valid_exts)) {
-               
-                    $data = Excel::load($path, function($reader) {
-                            
-                        })->get();
-                if (!empty($data) && $data->count()) {  
-                
-
-                       foreach ($data as $key => $value) {
-
-                            $totalRecords = count($data);
-
-                            
-                          
-                        $studentID= $sys->getStudentIDfromIndexno($value->indexno);
-                         $studentDb= $value->indexno  ;   
-                         
-                            //$courseArr= $sys->getCourseMountedInfo($course);
-                           // dd($courseArr);
-                            //$courseDb= $courseArr[0]->ID;
-                            //$courseCreditDb= $courseArr[0]->COURSE_CREDIT;
-                            //$courseLecturerDb= $courseArr[0]->LECTURER;
-                            $courseName=$sys->getCourseCodeByIDArray($course);
-                            $displayCourse=$courseName[0]->COURSE_NAME;
-                            $displayCode=$courseName[0]->COURSE_CODE;
-            $studentSearch = $sys->studentSearchByIndexNo($programme); // check if the students in the file tally with registered students
-                       //dd($studentDb);
-                        if (@in_array($studentDb, $studentSearch)) {
-                            $indexNo=$value->indexno;
-                            $quiz1=$value->quiz1;
-                            $quiz2=$value->quiz2;
-                            $midsem=$value->midsem1;
-                            $exam=$value->exam;
-                            $total= round(($quiz2+$quiz1+$midsem+$exam),2);
-                            $programmeDetail=$sys->getCourseProgramme($course);
-                            
-                            $program=$sys->getProgramArray($programmeDetail);
-                            $gradeArray = @$sys->getGrade($total, $program[0]->GRADING_SYSTEM);
-                            $grade = @$gradeArray[0]->grade;
-
-                           // dd($gradeArray );
-                            $gradePoint = @$gradeArray[0]->value;
-                           $test=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("level",$level)->where("sem",$semester)->where("course",$course)->where("credits",$credit)->where("year",$year)->get()->toArray();
-                           if(empty($test)){ 
-                           $record = new Models\AcademicRecordsModel();
-                                $record->indexno = $indexNo;
-                                $record->course = $course;
-                                $record->sem = $semester;
-                                $record->year = $year;
-                                $record->credits = $credit;
-                                $record->student= $studentID;
-                                $record->level = $level;
-                                $record->quiz1 = $quiz1;
-                                $record->quiz2 = $quiz2;
-                                $record->quiz3 = 0;
-                                $record->midSem1 = $midsem;
-                                $record->exam = $exam;
-                                $record->total = $total;
-                                $record->lecturer = @\Auth::user()->staffID;
-                                $record->grade = $grade;
-                                $record->gpoint =round(( $credit*$gradePoint),2);
-                                $record->save();
-                                
-                                $cgpa= number_format(@(( $credit*$gradePoint)/$credit), 2, '.', ',');
-                                $oldCgpa= @Models\StudentModel::where("INDEXNO",$indexNo)->select("CGPA","CLASS")->first();
-                               
-                                $newCgpa=$cgpa+@$oldCgpa->CGPA;
-                                 $class=@$sys->getClass($newCgpa);
-                                Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class));
-                              \DB::commit();
-                                   
-                           }
-                           else{
-                                Models\AcademicRecordsModel::where("indexno",$indexNo)->where("level",$level)->where("sem",$semester)->where("course",$course)->where("credits",$credit)->where("year",$year)->update(
-                                        array(
-                                            "indexno" =>$indexNo,
-                                "course"=>$course,
-                                "sem" =>$semester,
-                                "year"=>$year,
-                                "credits"=>$credit,
-                                "student"=>$studentID,
-                                "level"=>$level,
-                                "quiz1"=>$quiz1,
-                                "quiz2" =>$quiz2,
-                                "quiz3"=>0,
-                                "midSem1"=>$midsem,
-                                "exam" =>$exam,
-                                "total"=> $total,
-                                "lecturer"=>@\Auth::user()->staffID,
-                               "grade" => $grade,
-                                "gpoint" =>round(( $credit*$gradePoint),2),
-                                        )
-                                        
-                                        );
-                                $cgpa= number_format(@(( $credit*$gradePoint)/$credit), 2, '.', ',');
-                               
-                                $oldCgpa= Models\StudentModel::where("INDEXNO",$indexNo)->select("CGPA","CLASS")->first();
-                                $newCgpa=$cgpa+$oldCgpa->CGPA;
-                                 $class=$sys->getClass($newCgpa);
-                                Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class));
-                           
-                         \DB::commit();   
-                           }
-                              
-                        
-                                
-                       } else {
-                                return redirect('upload/legacy')->with("error", " <span style='font-weight:bold;font-size:13px;'>File contain unrecognized students for $programme .Please upload only  students for  $programme!</span> ");
-                            
-                                  
-                            } 
-                        }
-                          
-                         
-                        return redirect('/registered_courses')->with("success",  " <span style='font-weight:bold;font-size:13px;'> $totalRecords Marks  successfully uploaded !</span> ");
-                             
-                    
-                } else {
-                     return redirect('upload/legacy')->with("error", " <span style='font-weight:bold;font-size:13px;'>File is empty</span> ");
-                                   
-                }
-            } else {
-                 return redirect('upload/legacy')->with("error", " <span style='font-weight:bold;font-size:13px;'>Please upload only Excel file!</span> ");
-                    
-            }
-
-
-              
-
-        
-               
-            }
-        
-        }
-    }
-    public function uploadMarks(Request $request, SystemController $sys){
+     public function uploadMarks(Request $request, SystemController $sys){
 
       $this->validate($request, [
             
@@ -1519,7 +1430,7 @@ class CourseController extends Controller
 
                 $course = Models\CourseModel::where("id", $id)->firstOrFail();
                 $program = $sys->getProgramList2();
-                return view('courses.edit')
+                return view('courses.edit')->with("key",$id)
                                 ->with("program", $program)
                                 ->with('data', $course)
                                   ;
@@ -1531,7 +1442,7 @@ class CourseController extends Controller
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request){
         
                 $this->validate($request, [
 
@@ -1544,18 +1455,22 @@ class CourseController extends Controller
                   $name=$request->input("name");
                     $code=$request->input("code");
                     $program=$request->input("program");
+                     $id=$request->input("id");
                    // dd($program);
                 \DB::beginTransaction();
                 try {
                    
                     $query = @Models\CourseModel::where("id", $id)->update(array("name" => $name, "code" => $code, "pcode" => $program));
                     \DB::commit();
-                    if($query){
-                       // @Models\MountedCourseModel::where("COURSE",$id)->update(array("COURSE_CODE"=>$code,"PROGRAMME"=>$program));
-                        \DB::commit();
-                        return redirect('/courses')->with("success",  " <span style='font-weight:bold;font-size:13px;'> $name updated successfully</span> ");
-                      
-                        }
+                     
+                        if( $query){
+                        return response()->json(['status'=>'success','message'=>$name.' edited successfully ']);
+      
+                       }
+                       else{
+                           return response()->json(['status'=>'error','message'=>$name.' editing failed. try again ']);
+       
+                       }
                     
                 } catch (\Exception $e) {
                     \DB::rollback();
@@ -1580,14 +1495,7 @@ class CourseController extends Controller
             $sem=$array[0]->term;
             $year=$array[0]->year;
 
-//       
-//         $query= Models\MountedCourseModel::where('COURSE',$request->input("id"))
-//                ->where('COURSE_YEAR',$year)
-//                ->where('COURSE_SEMESTER',$sem)
-//                ->first();
-//         
-//        if($query==""){
-//            
+        
             $query1= Models\CourseModel::where('id',$request->input("id"))->where("createdBy",$hod)->delete();
              
           
@@ -1602,6 +1510,42 @@ class CourseController extends Controller
                  
                   
                return redirect("/courses")->with("error","<span style='font-weight:bold;font-size:13px;'>Whoops!! you are not the owner of this course</span> ");
+             }
+            
+          } 
+//          else{
+//                return redirect("/courses")->with("error","<span style='font-weight:bold;font-size:13px;'>Whoops!! you cannot delete a mounted course</span> ");
+//           
+//          }
+           
+        
+       else {
+           // abort(434, "{!!<b>Unauthorize Access detected</b>!!}");
+            redirect("/dashboard");
+        }
+         
+    }
+     public function destroyAllocatedCourse(Request $request,   SystemController $sys)
+    {
+        //dd($request->input("id"));
+       if(@\Auth::user()->role=='Admin' ||  @\Auth::user()->department=='top'){
+           $hod=@\Auth::user()->fund;
+            
+        
+            $query1= Models\CourseAllocationModel::where('id',$request->input("id"))->where("createdBy",$hod)->delete();
+             
+          
+            
+             if($query1){
+                
+                  \DB::commit();
+               return redirect("teachers/subject/allocation")->with("success","<span style='font-weight:bold;font-size:13px;'> Course allocation successfully deleted!</span> ");
+         
+             }
+             else{
+                 
+                  
+               return redirect("teachers/subject/allocation")->with("error","<span style='font-weight:bold;font-size:13px;'>Whoops!! you are not the allocator of this course sorry</span> ");
              }
             
           } 

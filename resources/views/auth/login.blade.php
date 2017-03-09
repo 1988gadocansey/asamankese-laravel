@@ -269,12 +269,14 @@ body{
               </table>
           </div>
         </div>
-        <div class="row">
-            <center><small style="font-size: 11px">&copy <?php echo  date('Y'); ?> | gadeksystems</small></center>         
-        </div>
+       
 
       </form>
+        
     </div>
+       <div class="row">
+            <center><small style="font-size: 11px">&copy <?php echo  date('Y'); ?> | gadeksystems</small></center>         
+        </div>
   </div>
 
 

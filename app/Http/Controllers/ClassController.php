@@ -80,7 +80,7 @@ class ClassController extends Controller {
 
                 $class= Models\ClassModel::where("id", $edit)->firstOrFail();
                 
-                return view('classes.edit')->with('data', $class)
+                return view('classes.edit')->with('data', $class)->with("key",$edit)
                                 ->with("teacher", $sys->getLectureList_All())->with("class", $sys->getClassSelectBoxEdit())
                                   ;
         }
@@ -90,6 +90,43 @@ class ClassController extends Controller {
             return redirect("/dashboard");
         }
     }
+    
+     public function update(Request $request, SystemController $sys){
+         $this->validate($request, [
+
+
+                    'next' => 'required',
+                    'name' => 'required',
+                    'teacher' => 'required',
+                    
+                ]);
+                     $id=$request->input("id");
+                  $name=$request->input("name");
+                    $nextClass=$request->input("next");
+                    $teacher=$request->input("teacher");
+                   // dd($program);
+                \DB::beginTransaction();
+                try {
+                   
+                    $query = @Models\ClassModel::where("id", $id)->update(array("name" => $name, "nextClass" => $nextClass, "teacherId" => $teacher));
+                    \DB::commit();
+                  
+                       if( $query){
+                        return response()->json(['status'=>'success','message'=>$name.' edited successfully ']);
+      
+                       }
+                       else{
+                           return response()->json(['status'=>'error','message'=>$name.' editing failed. try again ']);
+       
+                       }
+                    
+                } catch (\Exception $e) {
+                    \DB::rollback();
+                }
+           
+     }
+    
+    
     public function destroy(Request $request,   SystemController $sys)
     {
         //dd($request->input("id"));

@@ -181,11 +181,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/courses','CourseController@store');
     Route::get('/edit_course/{id}/id','CourseController@edit');
    
-    Route::post('/edit_course/{id}/id','CourseController@update');
+    Route::post('/edit_course/course','CourseController@update');
     
     /************** Class management ****************************/
     Route::match(array("get", "post"), '/classes', "ClassController@index");
     Route::get('/classes/{id}/edit','ClassController@edit');
+   Route::post('/classes/edit','ClassController@update');
    
     Route::delete('/delete_class', 'ClassController@destroy');
     
@@ -195,8 +196,18 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/registered_courses','CourseController@viewRegistered');
     Route::get('/enter_mark/{course}/course/{code}/code','CourseController@enterMark');
     Route::post('/enter_mark/{course}/course/{code}/code','CourseController@storeMark');
+    
     Route::delete('/delete_course', 'CourseController@destroy');
     Route::delete('/delete_mounted', 'CourseController@destroy_mounted');
+    
+    Route::get('/teachers/subject/allocation', "CourseController@subjectAllocator");
+   
+    Route::match(array("get", "post"), '/teachers/subject/create', "CourseController@allocationCreator");
+   
+    Route::delete('/deleteAllocation', 'CourseController@destroyAllocatedCourse');
+    
+    Route::post('/courses/allocation/update','CourseController@updateAllocation');
+     
     Route::get('/upload/marks','CourseController@showFileUpload');
     Route::post('/upload/marks','CourseController@uploadMarks');
     Route::match(array("get", "post"), '/attendanceSheet', "CourseController@attendanceSheet");
@@ -204,7 +215,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::match(array("get", "post"), '/upload/courses', "CourseController@uploadCourse");
     Route::get('/courseDownloadExcel/{type}', 'CourseController@courseDownloadExcel');
     Route::get('/marksDownloadExcel/{code}/code', 'CourseController@marksDownloadExcel');
-    Route::match(array("get", "post"), '/teachers/subject/allocation', "CourseController@subjectAllocator");
+    
+    
     Route::match(array("get", "post"), '/upload/mounted', "CourseController@uploadMounted");
     Route::match(array("get", "post"), '/upload/legacy', "CourseController@uploadLegacy");
     Route::match(array("get", "post"), '/mounted/{id}/edit', "CourseController@updateMounted");
